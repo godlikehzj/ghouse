@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- 控制台输出日志配置 -->
+    <appender name="Console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{yyyy/MM/dd HH:mm:ss,SSS}][%-5p] - %l:%m%n" />
+        </layout>
+    </appender>
+    <!-- 回滚文件输出日志配置 -->
+    <appender name="RollingFile" class="org.apache.log4j.RollingFileAppender">
+        <param name="file" value="/data/logs/ghouse/rollinglog.log" />
+        <param name="MaxFileSize" value="20MB" />
+        <param name="MaxBackupIndex" value="0" />
+        <param name="encoding" value="UTF-8" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{yyyy/MM/dd HH:mm:ss,SSS}][%-5p] - %l:%m%n" />
+        </layout>
+    </appender>
+    <!-- 每日生成一个文件配置 -->
+    <appender name="DailyRollingFile" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/data/logs/ghouse/daily/dailylog.log" />
+        <param name="encoding" value="UTF-8" />
+        <param name="BufferedIO" value="true" />
+        <param name="BufferSize" value="32768" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{yyyy/MM/dd HH:mm:ss,SSS}][%-5p] - %l:%m%n" />
+        </layout>
+    </appender>
+    <!-- 回滚文件错误日志配置 -->
+    <appender name="ErrorRollingFile" class="org.apache.log4j.RollingFileAppender">
+        <param name="file" value="/data/logs/ghoust/error/errorlog.log" />
+        <param name="MaxFileSize" value="20MB" />
+        <param name="MaxBackupIndex" value="5" />
+        <param name="encoding" value="UTF-8" />
+        <param name="Threshold" value="ERROR" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{yyyy/MM/dd HH:mm:ss,SSS}][%-5p] - %l:%m%n" />
+        </layout>
+    </appender>
+
+    <logger name="java.sql.Connection" additivity="true">
+        <level value="DEBUG" />
+    </logger>
+
+    <logger name="java.sql.Statement" additivity="true">
+        <level value="DEBUG" />
+    </logger>
+
+    <logger name="java.sql.PreparedStatement" additivity="true">
+        <level value="DEBUG" />
+    </logger>
+
+    <root>
+        <!-- <priority value="WARN" /> -->
+        <priority value="INFO" />
+        <appender-ref ref="Console" />
+        <appender-ref ref="RollingFile" />
+        <appender-ref ref="DailyRollingFile" />
+        <appender-ref ref="ErrorRollingFile" />
+    </root>
+</log4j:configuration>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+    <bean id="commonDataSourceProperties" abstract="true">
+
+        <property name="initialSize" value="${pool.initialSize}" />
+        <property name="maxIdle" value="${pool.maxIdle}" />
+        <property name="minIdle" value="${pool.minIdle}" />
+        <property name="maxActive" value="${pool.maxActive}" />
+        <property name="maxWait" value="${pool.maxWait}" />
+        <property name="logAbandoned" value="${pool.logAbandoned}" />
+        <property name="removeAbandoned" value="${pool.removeAbandoned}" />
+        <property name="removeAbandonedTimeout" value="${pool.removeAbandonedTimeout}" />
+        <property name="timeBetweenEvictionRunsMillis" value="${pool.timeBetweenEvictionRunsMillis}" />
+        <property name="minEvictableIdleTimeMillis" value="${pool.minEvictableIdleTimeMillis}" />
+        <property name="validationQuery" value="${pool.validationQuery}" />
+        <property name="testOnBorrow" value="${pool.testOnBorrow}" />
+        <property name="testOnReturn" value="${pool.testOnReturn}" />
+        <property name="testWhileIdle" value="${pool.testWhileIdle}" />
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+    </bean>
+
+    <bean id="dataSource" parent="commonDataSourceProperties"
+          class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="url" value="${ott.jdbc.url}" />
+        <property name="username" value="${ott.jdbc.username}" />
+        <property name="password" value="${ott.jdbc.password}" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:/mybatis/config.xml" />
+        <property name="mapperLocations" value="classpath:/mybatis/mapper/**/*Mapper.xml" />
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ghouse.service.mapper"/>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+
+            <tx:method name="save*" propagation="REQUIRED" read-only="false" />
+            <tx:method name="insert*" propagation="REQUIRED" read-only="false" />
+            <tx:method name="update*" propagation="REQUIRED" read-only="false" />
+            <tx:method name="delete*" propagation="REQUIRED" read-only="false" />
+            <tx:method name="find*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="*" propagation="SUPPORTS" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="txPointcut"
+                      expression="execution(* com.ghouse.service.*.*(..))" />
+        <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice"
+                     order="0" />
+    </aop:config>
+
+</beans>
