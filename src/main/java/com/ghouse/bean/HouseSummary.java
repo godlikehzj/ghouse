@@ -6,17 +6,17 @@ package com.ghouse.bean;
 public class HouseSummary {
     private long id;
     private String hname;
-    private String description;
+    private String addr;
     private String location;
     private int status;
 
     public HouseSummary() {
     }
 
-    public HouseSummary(long id, String hname, String description, String location, int status) {
+    public HouseSummary(long id, String hname, String addr, String location, int status) {
         this.id = id;
         this.hname = hname;
-        this.description = description;
+        this.addr = addr;
         this.location = location;
         this.status = status;
     }
@@ -37,12 +37,12 @@ public class HouseSummary {
         this.hname = hname;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAddr() {
+        return addr;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAddr(String addr) {
+        this.addr = addr;
     }
 
     public String getLocation() {

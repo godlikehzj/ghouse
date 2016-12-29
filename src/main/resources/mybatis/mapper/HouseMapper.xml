@@ -4,7 +4,7 @@
     <resultMap id="HouseSummary" type="com.ghouse.bean.HouseSummary">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="hname" jdbcType="VARCHAR" property="hname"/>
-        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="addr" jdbcType="VARCHAR" property="addr"/>
         <result column="location" jdbcType="VARCHAR" property="location"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
     </resultMap>

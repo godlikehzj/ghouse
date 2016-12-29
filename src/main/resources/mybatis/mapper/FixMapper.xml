@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ghouse.service.mapper.FixMapper">
+
+
+    <select id="getFixList" resultType="com.ghouse.bean.FixContent">
+        <![CDATA[
+              SELECT id, content FROM fix_content WHERE status=1;
+        ]]>
+    </select>
+
+    <insert id="addFixNotify">
+        INSERT INTO fix_history(uid, hid, fid, createTime, status) VALUES (#{uid}, #{hid}, #{fid}, now(), 0)
+    </insert>
+
+    <select id="getFixHistory" resultType="com.ghouse.bean.FixHistory">
+    SELECT h.hname, h.addr, fc.content, fc.status, fh.createTime
+    FROM house h,fix_content fc,fix_history fh
+    WHERE fh.uid = #{uid} and h.id = fh.hid and fh.fid = fc.id
+    </select>
+</mapper>
