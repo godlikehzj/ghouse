@@ -3,7 +3,7 @@ package com.ghouse.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ghouse.bean.HouseSummary;
+import com.ghouse.bean.HouseInfo;
 import com.ghouse.bean.User;
 import com.ghouse.service.mapper.HouseMapper;
 import com.ghouse.service.mapper.UserMapper;
@@ -32,9 +32,10 @@ public class HouseService {
         if (user.getRole() == 1){
             String[] lists = user.getHouseIds().split(",");
             for (String houseId:lists){
-                HouseSummary houseSummary = houseMapper.getHouseSummary(houseId);
-                if (houseSummary != null){
-                    JSONObject jsonObject = (JSONObject)JSON.toJSON(houseSummary);
+                HouseInfo houseInfo = houseMapper.getHouseInfo(houseId);
+                if (houseInfo != null){
+                    JSONObject jsonObject = (JSONObject)JSON.toJSON(houseInfo);
+
                     jsonArray.add(jsonObject);
                 }
             }

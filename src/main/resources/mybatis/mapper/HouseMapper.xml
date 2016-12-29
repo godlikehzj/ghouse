@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ghouse.service.mapper.HouseMapper">
-    <resultMap id="HouseSummary" type="com.ghouse.bean.HouseSummary">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="hname" jdbcType="VARCHAR" property="hname"/>
-        <result column="addr" jdbcType="VARCHAR" property="addr"/>
-        <result column="location" jdbcType="VARCHAR" property="location"/>
-        <result column="status" jdbcType="INTEGER" property="status"/>
-    </resultMap>
 
-    <select id="getHouseSummary" resultMap="HouseSummary">
+    <select id="getHouseInfo" resultType="com.ghouse.bean.HouseInfo">
         <![CDATA[
               SELECT * FROM house WHERE id=#{id} AND status=1;
         ]]>
