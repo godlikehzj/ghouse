@@ -43,7 +43,7 @@ public class FixService {
             return new ResponseEntity(1, "无效token", "");
         }
 
-        if (houseMapper.getHouseSummary(houseId) == null){
+        if (houseMapper.getHouseInfo(houseId) == null){
             return new ResponseEntity(2, "垃圾房不存在", "");
         }
 

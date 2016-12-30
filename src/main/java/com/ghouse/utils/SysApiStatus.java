@@ -17,8 +17,8 @@ public class SysApiStatus {
     public static Map<Integer, String> roles = new HashMap<Integer, String>();
     static {
         roles.put(1, "分拣员");
-        roles.put(2, "回收员");
-        roles.put(3, "清运员");
+        roles.put(2, "清运员");
+        roles.put(3, "回收员");
     }
 
     public static String getRoleName(Integer key)

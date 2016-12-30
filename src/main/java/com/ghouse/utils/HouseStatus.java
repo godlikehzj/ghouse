@@ -1,5 +1,7 @@
 package com.ghouse.utils;
 
+import com.ghouse.service.HouseService;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +13,18 @@ import java.util.Map;
 public class HouseStatus {
     public static HouseStatus houseStatus = new HouseStatus();
     public List<Status> allstatus;
+
+    public static HouseStatus getInstance(){
+        return houseStatus;
+    }
+
+    public List<Status> getAllstatus() {
+        return allstatus;
+    }
+
+    public void setAllstatus(List<Status> allstatus) {
+        this.allstatus = allstatus;
+    }
 
     private HouseStatus(){
         allstatus = new ArrayList<>();
@@ -37,9 +51,31 @@ public class HouseStatus {
 
         Status smoke = new Status();
         smoke.setName("smoke");
+        smoke.setCname("烟气");
         smoke.getTips().put(0, "正常");
         smoke.getTips().put(1, "异常");
-        allstatus.add(gas);
+        allstatus.add(smoke);
+
+        Status door = new Status();
+        door.setName("door");
+        door.setCname("门锁");
+        door.getTips().put(0, "正常");
+        door.getTips().put(1, "异常");
+        allstatus.add(door);
+
+        Status lamp = new Status();
+        lamp.setName("lamp");
+        lamp.setName("紫光灯");
+        lamp.getTips().put(0, "开启");
+        lamp.getTips().put(1, "异常");
+        allstatus.add(lamp);
+
+        Status capacity = new Status();
+        capacity.setName("capacity");
+        capacity.setCname("垃圾容量");
+        capacity.getTips().put(0, "空");
+        capacity.getTips().put(1, "已满");
+        allstatus.add(capacity);
     }
 
     public class Status{

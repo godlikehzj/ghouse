@@ -7,10 +7,14 @@ import com.ghouse.bean.HouseInfo;
 import com.ghouse.bean.User;
 import com.ghouse.service.mapper.HouseMapper;
 import com.ghouse.service.mapper.UserMapper;
+import com.ghouse.utils.HouseStatus;
 import com.ghouse.utils.ResponseEntity;
 import com.ghouse.utils.SysApiStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 
 /**
  * Created by godlikehzj on 2016/12/19.
@@ -23,6 +27,8 @@ public class HouseService {
     @Autowired
     private HouseMapper houseMapper;
 
+    private HouseStatus houseStatus = HouseStatus.getInstance();
+
     public ResponseEntity getHouseList(String token){
         JSONArray jsonArray = new JSONArray();
         User user = userMapper.getUserByToken(token);
@@ -34,9 +40,34 @@ public class HouseService {
             for (String houseId:lists){
                 HouseInfo houseInfo = houseMapper.getHouseInfo(houseId);
                 if (houseInfo != null){
-                    JSONObject jsonObject = (JSONObject)JSON.toJSON(houseInfo);
+                    JSONObject housejson = new JSONObject();
+                    housejson.put("id", houseInfo.getId());
+                    housejson.put("name", houseInfo.getHname());
+                    housejson.put("addr", houseInfo.getAddr());
+                    housejson.put("location", houseInfo.getLocation());
 
-                    jsonArray.add(jsonObject);
+                    JSONArray statusArray = new JSONArray();
+                    for (HouseStatus.Status status : houseStatus.getAllstatus()){
+                        JSONObject statusJson = new JSONObject();
+                        statusJson.put("name", status.getName());
+                        statusJson.put("cname", status.getCname());
+
+                        Class<? extends Object> clazz = houseInfo.getClass();
+                        try{
+                            PropertyDescriptor pd = new PropertyDescriptor(status.getName(), clazz);
+                            Method getMethod = pd.getReadMethod();
+                            int statu = (int)getMethod.invoke(houseInfo);
+
+                            statusJson.put("statu", statu);
+                            statusJson.put("code", status.getTips().get(statu));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        statusArray.add(statusJson);
+                    }
+                    housejson.put("status", statusArray);
+
+                    jsonArray.add(housejson);
                 }
             }
         }

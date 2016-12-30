@@ -15,11 +15,12 @@ public class HouseInfo {
     private int smoke;
     private int door;
     private int lamp;
+    private int capacity;
 
     public HouseInfo() {
     }
 
-    public HouseInfo(long id, String hname, String addr, String location, int status, int temperature, int humidity, int gas, int smoke, int door, int lamp) {
+    public HouseInfo(long id, String hname, String addr, String location, int status, int temperature, int humidity, int gas, int smoke, int door, int lamp, int capacity) {
         this.id = id;
         this.hname = hname;
         this.addr = addr;
@@ -31,6 +32,7 @@ public class HouseInfo {
         this.smoke = smoke;
         this.door = door;
         this.lamp = lamp;
+        this.capacity = capacity;
     }
 
     public long getId() {
@@ -117,7 +119,16 @@ public class HouseInfo {
         return lamp;
     }
 
-    public void setLamp(int lamp) {
+    public void setLamp(int lamp)
+    {
         this.lamp = lamp;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }
