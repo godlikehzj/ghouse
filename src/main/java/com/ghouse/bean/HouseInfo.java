@@ -16,6 +16,7 @@ public class HouseInfo {
     private int door;
     private int lamp;
     private int capacity;
+    private String res_info;
 
     public HouseInfo() {
     }
@@ -130,5 +131,13 @@ public class HouseInfo {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public String getRes_info() {
+        return res_info;
+    }
+
+    public void setRes_info(String res_info) {
+        this.res_info = res_info;
     }
 }

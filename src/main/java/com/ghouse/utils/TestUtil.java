@@ -11,16 +11,7 @@ import java.lang.reflect.Method;
  */
 public class TestUtil {
     public static void main(String[] args){
-        HouseInfo houseInfo = new HouseInfo();
-        Class<? extends Object> clazz = houseInfo.getClass();
-//        Field[] fields = houseInfo.getClass().getDeclaredFields();// 获得属性
-        try{
-            PropertyDescriptor pd = new PropertyDescriptor("gas", clazz);
-            Method getMethod = pd.getReadMethod();
-            System.out.print(getMethod.invoke(houseInfo));
-        }catch (Exception e){
-
-        }
-
+        String clientId = "1234";
+        System.out.print(clientId.substring(0, clientId.length() - 1));
     }
 }

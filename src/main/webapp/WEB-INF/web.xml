@@ -48,6 +48,17 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter><!-- 校验公共参数 -->
+        <filter-name>verifyFilter</filter-name>
+        <filter-class>com.ghouse.controller.filter.VerifyFilter</filter-class>
+
+    </filter>
+
+    <filter-mapping>
+        <filter-name>verifyFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <session-config>
         <session-timeout>-1</session-timeout>
     </session-config>

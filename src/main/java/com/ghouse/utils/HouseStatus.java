@@ -11,8 +11,11 @@ import java.util.Map;
  * Created by zhijunhu on 2016/12/29.
  */
 public class HouseStatus {
-    public static HouseStatus houseStatus = new HouseStatus();
-    public List<Status> allstatus;
+    private static HouseStatus houseStatus = new HouseStatus();
+    private List<Status> allstatus;
+    private List<Status> resStatus;
+    private int[] recover = {1,2,3,4,5,6,7,8};
+    private int[] remove = {1,8};
 
     public static HouseStatus getInstance(){
         return houseStatus;
@@ -26,8 +29,90 @@ public class HouseStatus {
         this.allstatus = allstatus;
     }
 
+    public List<Status> getResStatus() {
+        return resStatus;
+    }
+
+    public void setResStatus(List<Status> resStatus) {
+        this.resStatus = resStatus;
+    }
+
+    public int[] getRecover() {
+        return recover;
+    }
+
+    public void setRecover(int[] recover) {
+        this.recover = recover;
+    }
+
+    public int[] getRemove() {
+        return remove;
+    }
+
+    public void setRemove(int[] remove) {
+        this.remove = remove;
+    }
+
     private HouseStatus(){
         allstatus = new ArrayList<>();
+        resStatus = new ArrayList<>();
+
+        Status cylj = new Status();
+        cylj.setName("cylj");
+        cylj.setCname("厨余垃圾");
+        cylj.getTips().put(0, "未满");
+        cylj.getTips().put(1, "已满");
+        resStatus.add(cylj);
+
+        Status paper = new Status();
+        paper.setName("paper");
+        paper.setCname("纸");
+        paper.getTips().put(0, "未满");
+        paper.getTips().put(1, "已满");
+        resStatus.add(paper);
+
+        Status metal = new Status();
+        metal.setName("metal");
+        metal.setCname("金属");
+        metal.getTips().put(0, "未满");
+        metal.getTips().put(1, "已满");
+        resStatus.add(metal);
+
+        Status plastic = new Status();
+        plastic.setName("plastic");
+        plastic.setCname("塑料");
+        plastic.getTips().put(0, "未满");
+        plastic.getTips().put(1, "已满");
+        resStatus.add(plastic);
+
+        Status clothes = new Status();
+        clothes.setName("clothes");
+        clothes.setCname("衣物");
+        clothes.getTips().put(0, "未满");
+        clothes.getTips().put(1, "已满");
+        resStatus.add(clothes);
+
+        Status glass = new Status();
+        glass.setName("glass");
+        glass.setCname("玻璃");
+        glass.getTips().put(0, "未满");
+        glass.getTips().put(1, "已满");
+        resStatus.add(glass);
+
+        Status unknow = new Status();
+        unknow.setName("unknow");
+        unknow.setCname("未知分类");
+        unknow.getTips().put(0, "未满");
+        unknow.getTips().put(1, "已满");
+        resStatus.add(unknow);
+
+        Status other = new Status();
+        other.setName("other");
+        other.setCname("其他");
+        other.getTips().put(0, "未满");
+        other.getTips().put(1, "已满");
+        resStatus.add(other);
+
         Status temperature = new Status();
         temperature.setName("temperature");
         temperature.setCname("温度");
@@ -65,7 +150,7 @@ public class HouseStatus {
 
         Status lamp = new Status();
         lamp.setName("lamp");
-        lamp.setName("紫光灯");
+        lamp.setCname("紫光灯");
         lamp.getTips().put(0, "开启");
         lamp.getTips().put(1, "异常");
         allstatus.add(lamp);

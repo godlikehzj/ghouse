@@ -1,14 +1,25 @@
 package com.ghouse.websocket;
 
+import com.ghouse.bean.User;
+import com.ghouse.service.mapper.UserMapper;
 import com.ghouse.utils.ResponseEntity;
 import com.ghouse.utils.SysApiStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * Created by godlikehzj on 2016/12/25.
  */
 @Service
 public class DeviceService {
+    @Autowired
+    private UserMapper userMapper;
+
     private GhwebSocketHandler handler;
 
     public void SetHandler(GhwebSocketHandler hander){
@@ -27,5 +38,39 @@ public class DeviceService {
         }else{
             return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
         }
+    }
+
+    public ResponseEntity openDoor(String clientId, String token, String doorId){
+        User user = userMapper.getUserByToken(token);
+        if (user == null){
+            return new ResponseEntity(1, "无效token", "");
+        }
+        String updateUserId = clientId;
+        updateUserId = updateUserId.replace(updateUserId.charAt(updateUserId.length() - 1), '2');
+        if (handler.sendMessage(updateUserId, String.valueOf(user.getId())) == 1){
+            return new ResponseEntity(1, "client not collected", updateUserId);
+        }
+
+        if (handler.sendMessage(clientId, doorId) == 1){
+            return new ResponseEntity(1, "client not collected", clientId);
+        }
+
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
+    }
+
+
+    public ResponseEntity addPhoto(String clientId, String userId, MultipartFile[] files) throws IllegalStateException,IOException {
+        String filename = "";
+        for(MultipartFile file : files){
+            String[] tmp = file.getOriginalFilename().split("\\.");
+            filename = clientId.substring(0, clientId.length() -1) + "_"+userId + "_" + new Date().getTime() + "." + tmp[tmp.length - 1];
+            file.transferTo(new File(SysApiStatus.uploadPath +filename));
+            break;
+        }
+        String url = "";
+        if (!filename.isEmpty()){
+            url = SysApiStatus.fileUrl + filename;
+        }
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), url);
     }
 }

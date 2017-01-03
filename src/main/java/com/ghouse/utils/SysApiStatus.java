@@ -12,7 +12,13 @@ public class SysApiStatus {
     public static final Integer OK = 0; //业务正常
     public static final Integer OK_200 = 200; //业务正常
     public static final Integer ERROR = 500; //ERROR
+    public static final Integer INVALID_CLIENTID = 501;
     public static final Integer SYSTEMERROR = 50000; //系统错误
+
+    public static final String uploadPath = "/opt/www/files/";
+//    public static final String uploadPath = "/Users/godlikehzj/Documents/somework/photo/";
+
+    public static final String fileUrl = "http://123.56.105.105/files/";
 
     public static Map<Integer, String> roles = new HashMap<Integer, String>();
     static {
@@ -31,6 +37,7 @@ public class SysApiStatus {
         message.put(OK_200, "ok");
         message.put(ERROR, "ERROR");
         message.put(SYSTEMERROR, "系统错误");
+        message.put(INVALID_CLIENTID, "无效的clientId");
     }
 
     /**
