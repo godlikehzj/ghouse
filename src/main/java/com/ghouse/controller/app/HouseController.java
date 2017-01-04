@@ -1,7 +1,9 @@
 package com.ghouse.controller.app;
 
+import com.ghouse.bean.User;
 import com.ghouse.controller.base.BaseController;
 import com.ghouse.service.HouseService;
+import com.ghouse.utils.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +26,34 @@ public class HouseController extends BaseController{
     public void getHouseList(@PathVariable String format,
                              HttpServletRequest request,
                              HttpServletResponse response,
-                             @RequestParam("location") String location){
-        outResult(request, response, format, houseService.getHouseList(request.getHeader("token")));
+                             Double lng,
+                             Double lat){
+        User user = houseService.getUserByToken(request.getHeader("token"));
+        if (user == null){
+            outResult(request, response, format, new ResponseEntity(1, "无效token", ""));
+            return;
+        }
+        outResult(request, response, format, houseService.getHouseList(user));
     }
 
+    @RequestMapping(value = "handle.{format}")
+    public void handlehouse(@PathVariable String format,
+                            HttpServletRequest request,
+                            HttpServletResponse response,
+                            @RequestParam("houseId") String houseId,
+                            @RequestParam("res_name") String res_name){
+        User user = houseService.getUserByToken(request.getHeader("token"));
+        if (user == null){
+            outResult(request, response, format, new ResponseEntity(1, "无效token", ""));
+            return;
+        }
+//        outResult(request, response, format, houseService.processHandle(user, houseId, res_name));
+    }
+
+    @RequestMapping(value = "assortlist.{format}")
+    public void getAssortList(@PathVariable String format,
+                              HttpServletRequest request,
+                              HttpServletResponse response){
+
+    }
 }

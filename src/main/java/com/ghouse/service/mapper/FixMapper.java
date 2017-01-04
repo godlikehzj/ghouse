@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface FixMapper {
     public List<FixContent> getFixList();
-    public void addFixNotify(@Param("uid") long uid, @Param("hid") long hid, @Param("fid") long fid);
+    public void addFixNotify(@Param("uid") long uid, @Param("hid") long hid, @Param("fid") String fid, @Param("other_content") String other_content);
     public List<FixHistory> getFixHistory(@Param("uid") long uid);
 }

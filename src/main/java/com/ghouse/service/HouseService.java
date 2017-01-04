@@ -29,12 +29,41 @@ public class HouseService {
 
     private HouseStatus houseStatus = HouseStatus.getInstance();
 
-    public ResponseEntity getHouseList(String token){
+    public User getUserByToken(String token){
+        return userMapper.getUserByToken(token);
+    }
+//    public ResponseEntity processHandle(User user, String houseId, String res_names){
+//        String[] res_name = res_names.split(",");
+//        HouseInfo houseInfo = houseMapper.getHouseInfo(houseId);
+//        if (houseInfo == null || houseInfo.getRes_info() == null){
+//            return new ResponseEntity(2, "invalid house id or house res", "");
+//        }
+//        String[] res_status = houseInfo.getRes_info().split(",");
+//        for(String rname : res_name){
+//            for(int i = 0; i<houseStatus.getAllstatus().size(); i++){
+//                HouseStatus.Status status = houseStatus.getAllstatus().get(i);
+//                if (status.getName().equals(rname)){
+//                    if (res_status[i].equals(HouseStatus.hanleStatu)){
+//                        return new ResponseEntity(3, rname + " is being hanled", "");
+//                    }else{
+//                        res_status[i] = HouseStatus.hanleStatu;
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+//    public ResponseEntity getSortList(){
+//
+//    }
+    /**
+     * 获取垃圾屋列表
+     * @param user
+     * @return
+     */
+    public ResponseEntity getHouseList(User user){
         JSONArray jsonArray = new JSONArray();
-        User user = userMapper.getUserByToken(token);
-        if (user == null){
-            return new ResponseEntity(1, "无效token", "");
-        }
+
         if (user.getHouseIds() == null){
             return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), jsonArray);
         }
@@ -46,7 +75,9 @@ public class HouseService {
                 housejson.put("id", houseInfo.getId());
                 housejson.put("name", houseInfo.getHname());
                 housejson.put("addr", houseInfo.getAddr());
-                housejson.put("location", houseInfo.getLocation());
+                housejson.put("lng", houseInfo.getLng());
+                housejson.put("lat", houseInfo.getLat());
+
                 if (user.getRole() == 1){
                     housejson.put("status", getSortStatus(houseInfo));
                 }else if (user.getRole() == 2){
@@ -63,6 +94,11 @@ public class HouseService {
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), jsonArray);
     }
 
+    /**
+     * 获取垃圾屋所有状态信息
+     * @param houseInfo
+     * @return
+     */
     private JSONArray getSortStatus(HouseInfo houseInfo){
         JSONArray statusArray = new JSONArray();
         for (HouseStatus.Status status : houseStatus.getAllstatus()){

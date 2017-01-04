@@ -9,6 +9,7 @@ public class FixHistory {
     String hname;
     String addr;
     String content;
+    String other_content;
     int status;
     Date createTime;
 
@@ -16,10 +17,11 @@ public class FixHistory {
     public FixHistory() {
     }
 
-    public FixHistory(String hname, String addr, String content, int status, Date createTime) {
+    public FixHistory(String hname, String addr, String content, String other_content, int status, Date createTime) {
         this.hname = hname;
         this.addr = addr;
         this.content = content;
+        this.other_content = other_content;
         this.status = status;
         this.createTime = createTime;
     }
@@ -62,5 +64,13 @@ public class FixHistory {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getOther_content() {
+        return other_content;
+    }
+
+    public void setOther_content(String other_content) {
+        this.other_content = other_content;
     }
 }

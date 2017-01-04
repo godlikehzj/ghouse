@@ -16,6 +16,7 @@ public class HouseStatus {
     private List<Status> resStatus;
     private int[] recover = {1,2,3,4,5,6,7,8};
     private int[] remove = {1,8};
+    public static String hanleStatu = "9";
 
     public static HouseStatus getInstance(){
         return houseStatus;

@@ -30,7 +30,7 @@ public class VerifyFilter implements Filter{
 //		}
 //		ResponseEntity responseEntity = checkParam(paramMap);
         ResponseEntity responseEntity = null;
-        if (((HttpServletRequest) request).getRequestURI().contains("/device/")){
+        if (((HttpServletRequest) request).getRequestURI().contains("/device/") && !((HttpServletRequest) request).getRequestURI().contains("/device/send.json")){
             responseEntity = checkHeads(req);
         }
 
@@ -38,7 +38,7 @@ public class VerifyFilter implements Filter{
             chain.doFilter(request, response);
         } else {
 //            JSONObject jsonObject = JSON.toJSON(responseEntity);
-            response.setContentType("text/json; charset=UTF-8");
+            response.setContentType("text /json; charset=UTF-8");
             PrintWriter out;
             try {
                 out = response.getWriter();

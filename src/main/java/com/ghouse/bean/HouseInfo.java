@@ -7,7 +7,6 @@ public class HouseInfo {
     private long id;
     private String hname;
     private String addr;
-    private String location;
     private int status;
     private int temperature;
     private int humidity;
@@ -17,15 +16,16 @@ public class HouseInfo {
     private int lamp;
     private int capacity;
     private String res_info;
+    private double lng;
+    private double lat;
 
     public HouseInfo() {
     }
 
-    public HouseInfo(long id, String hname, String addr, String location, int status, int temperature, int humidity, int gas, int smoke, int door, int lamp, int capacity) {
+    public HouseInfo(long id, String hname, String addr, int status, int temperature, int humidity, int gas, int smoke, int door, int lamp, int capacity, String res_info, float lng, float lat) {
         this.id = id;
         this.hname = hname;
         this.addr = addr;
-        this.location = location;
         this.status = status;
         this.temperature = temperature;
         this.humidity = humidity;
@@ -34,6 +34,9 @@ public class HouseInfo {
         this.door = door;
         this.lamp = lamp;
         this.capacity = capacity;
+        this.res_info = res_info;
+        this.lng = lng;
+        this.lat = lat;
     }
 
     public long getId() {
@@ -58,14 +61,6 @@ public class HouseInfo {
 
     public void setAddr(String addr) {
         this.addr = addr;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public int getStatus() {
@@ -139,5 +134,21 @@ public class HouseInfo {
 
     public void setRes_info(String res_info) {
         this.res_info = res_info;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 }

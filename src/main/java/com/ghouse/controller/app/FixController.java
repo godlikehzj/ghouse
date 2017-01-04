@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,13 +28,13 @@ public class FixController extends BaseController {
         outResult(request, response, format, fixService.getFixList());
     }
 
-    @RequestMapping(value = "notify.{format}")
+    @RequestMapping(value = "notify.{format}", method = RequestMethod.POST)
     public void notifyFix(@PathVariable String format,
                           HttpServletRequest request,
                           HttpServletResponse response,
                           @RequestParam("list") String list,
                           @RequestParam("houseId") String houseId){
-        outResult(request, response, format, fixService.notifyFixList(request.getHeader("token"), list, houseId));
+        outResult(request, response, format, fixService.notifyFixList(request.getHeader("token"), request.getParameterMap()));
     }
 
     @RequestMapping(value = "getHistory.{format}")
