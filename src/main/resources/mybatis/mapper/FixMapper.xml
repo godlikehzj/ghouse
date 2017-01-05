@@ -14,7 +14,7 @@
     </insert>
 
     <select id="getFixHistory" resultType="com.ghouse.bean.FixHistory">
-    SELECT h.hname, h.addr, fh.fid as content, fh.status, fh.createTime
+    SELECT h.hname, h.addr, fh.fid as content, fh.status, fh.createTime, fh.other_content
     FROM house h,fix_history fh
     WHERE fh.uid = #{uid} and h.id = fh.hid
     </select>

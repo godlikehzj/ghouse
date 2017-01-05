@@ -54,6 +54,6 @@ public class HouseController extends BaseController{
     public void getAssortList(@PathVariable String format,
                               HttpServletRequest request,
                               HttpServletResponse response){
-
+        outResult(request, response, format, houseService.getAssortList());
     }
 }

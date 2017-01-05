@@ -29,6 +29,10 @@ public class HouseService {
 
     private HouseStatus houseStatus = HouseStatus.getInstance();
 
+    public ResponseEntity getAssortList(){
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), houseMapper.getHouseRes());
+    }
+
     public User getUserByToken(String token){
         return userMapper.getUserByToken(token);
     }

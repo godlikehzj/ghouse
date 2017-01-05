@@ -31,9 +31,7 @@ public class FixController extends BaseController {
     @RequestMapping(value = "notify.{format}", method = RequestMethod.POST)
     public void notifyFix(@PathVariable String format,
                           HttpServletRequest request,
-                          HttpServletResponse response,
-                          @RequestParam("list") String list,
-                          @RequestParam("houseId") String houseId){
+                          HttpServletResponse response){
         outResult(request, response, format, fixService.notifyFixList(request.getHeader("token"), request.getParameterMap()));
     }
 

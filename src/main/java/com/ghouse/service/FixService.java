@@ -89,7 +89,12 @@ public class FixService {
             String[] fixids=list.split(",");
             String newContent = "";
             for(String fixId : fixids){
-                newContent = fixContents.get(Long.valueOf(fixId)).getContent() + " ";
+                if (fixContents.get(Long.valueOf(fixId)) != null){
+                    newContent += fixContents.get(Long.valueOf(fixId)).getContent() + ",";
+                }
+            }
+            if (newContent.length() > 0){
+                newContent = newContent.substring(0, newContent.length() - 1);
             }
 
             fixHistory.setContent(newContent);

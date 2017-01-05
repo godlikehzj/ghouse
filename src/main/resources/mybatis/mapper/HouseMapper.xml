@@ -7,4 +7,8 @@
               SELECT * FROM house WHERE id=#{id} AND status=1;
         ]]>
     </select>
+
+    <select id="getHouseRes" resultType="com.ghouse.bean.HouseRes">
+        SELECT id,name,cname FROM house_res WHERE status = 2
+    </select>
 </mapper>
