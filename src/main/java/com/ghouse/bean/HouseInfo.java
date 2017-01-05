@@ -8,7 +8,7 @@ public class HouseInfo {
     private String hname;
     private String addr;
     private int status;
-    private int temperature;
+    private String temperature;
     private int humidity;
     private int gas;
     private int smoke;
@@ -22,7 +22,7 @@ public class HouseInfo {
     public HouseInfo() {
     }
 
-    public HouseInfo(long id, String hname, String addr, int status, int temperature, int humidity, int gas, int smoke, int door, int lamp, int capacity, String res_info, float lng, float lat) {
+    public HouseInfo(long id, String hname, String addr, int status, String temperature, int humidity, int gas, int smoke, int door, int lamp, int capacity, String res_info, double lng, double lat) {
         this.id = id;
         this.hname = hname;
         this.addr = addr;
@@ -71,11 +71,11 @@ public class HouseInfo {
         this.status = status;
     }
 
-    public int getTemperature() {
+    public String getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(int temperature) {
+    public void setTemperature(String temperature) {
         this.temperature = temperature;
     }
 

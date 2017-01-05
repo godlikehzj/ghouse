@@ -1,6 +1,7 @@
 package com.ghouse.websocket;
 
 import com.ghouse.bean.User;
+import com.ghouse.service.mapper.HouseMapper;
 import com.ghouse.service.mapper.UserMapper;
 import com.ghouse.utils.ResponseEntity;
 import com.ghouse.utils.SysApiStatus;
@@ -19,6 +20,9 @@ import java.util.Date;
 public class DeviceService {
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private HouseMapper houseMapper;
 
     private GhwebSocketHandler handler;
 
@@ -72,5 +76,34 @@ public class DeviceService {
             url = SysApiStatus.fileUrl + filename;
         }
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), url);
+    }
+
+    public ResponseEntity setTemperatureAndHumidity(String clientId, String temperature, int humidity){
+        houseMapper.updateTemperatureAndHumidity(Long.valueOf(clientId), temperature, humidity);
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
+    }
+
+    public ResponseEntity setCapacitys(String clientId, int buffer, int capacity){
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
+    }
+
+    public ResponseEntity setAq(String clientId, int aq){
+        houseMapper.updateAq(Long.valueOf(clientId), aq);
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
+    }
+
+    public ResponseEntity setGas(String clientId, int gas){
+        houseMapper.updateAq(Long.valueOf(clientId), gas);
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
+    }
+
+    public ResponseEntity setWeight(String clientId, int userId, int category, int weight){
+//        houseMapper.updateAq(Long.valueOf(clientId), gas);
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
+    }
+
+    public ResponseEntity setLock(String clientId, int pn, int indoor, int outdoor, int tank){
+//        houseMapper.updateAq(Long.valueOf(clientId), gas);
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
     }
 }

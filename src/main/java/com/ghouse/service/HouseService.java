@@ -2,6 +2,7 @@ package com.ghouse.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ghouse.bean.AchieveHistory;
 import com.ghouse.bean.HouseInfo;
 import com.ghouse.bean.User;
 import com.ghouse.service.mapper.HouseMapper;
@@ -29,6 +30,19 @@ public class HouseService {
 
     private HouseStatus houseStatus = HouseStatus.getInstance();
 
+    public ResponseEntity getAchievementHistory(User user, String date){
+        List<AchieveHistory> lists = houseMapper.getAchieveHistory(user.getId(), date);
+        JSONArray jsonArray = new JSONArray();
+        for(AchieveHistory achieveHistory :lists){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("houseId", achieveHistory.getHid());
+            jsonObject.put("num", achieveHistory.getNum());
+            jsonObject.put("weight", achieveHistory.getWeight());
+
+            jsonArray.add(jsonObject);
+        }
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK),jsonArray);
+    }
     public ResponseEntity getAssortList(){
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), houseMapper.getHouseRes());
     }
@@ -103,12 +117,11 @@ public class HouseService {
      * @param houseInfo
      * @return
      */
-    private JSONArray getSortStatus(HouseInfo houseInfo){
-        JSONArray statusArray = new JSONArray();
+    private JSONObject getSortStatus(HouseInfo houseInfo){
+        JSONObject statusJson = new JSONObject();
         for (HouseStatus.Status status : houseStatus.getAllstatus()){
-            JSONObject statusJson = new JSONObject();
-            statusJson.put("name", status.getName());
-            statusJson.put("cname", status.getCname());
+            JSONObject statuJson = new JSONObject();
+            statuJson.put("cname", status.getCname());
 
             Class<? extends Object> clazz = houseInfo.getClass();
             try{
@@ -116,15 +129,15 @@ public class HouseService {
                 Method getMethod = pd.getReadMethod();
                 int statu = (int)getMethod.invoke(houseInfo);
 
-                statusJson.put("statu", statu);
-                statusJson.put("statuText", status.getTips().get(statu));
+                statuJson.put("statu", statu);
+                statuJson.put("statuText", status.getTips().get(statu));
             }catch (Exception e){
                 e.printStackTrace();
             }
-            statusArray.add(statusJson);
+            statusJson.put(status.getName(), statuJson);
         }
 
-        return statusArray;
+        return statusJson;
     }
 
     /**
@@ -133,26 +146,25 @@ public class HouseService {
      * @param auths
      * @return
      */
-    private JSONArray getResStatus(HouseInfo houseInfo, int[] auths){
-        JSONArray statusArray = new JSONArray();
+    private JSONObject getResStatus(HouseInfo houseInfo, int[] auths){
+        JSONObject statusJson = new JSONObject();
         if (houseInfo.getRes_info().isEmpty()){
-            return statusArray;
+            return statusJson;
         }
         String[] resInfo = houseInfo.getRes_info().split(",");
         List<HouseStatus.Status> resStatus = houseStatus.getResStatus();
         for (int i = 0; i < auths.length; i++){
             int index = auths[i] - 1 ;
             if (resStatus.size() > index && resInfo.length > index){
-                JSONObject statusJson = new JSONObject();
-                statusJson.put("name", resStatus.get(index).getName());
-                statusJson.put("cname", resStatus.get(index).getCname());
-                statusJson.put("statu", resInfo[index]);
-                statusJson.put("statuText", resStatus.get(index).getTips().get(Integer.valueOf(resInfo[index])));
-                statusArray.add(statusJson);
+                JSONObject statuJson = new JSONObject();
+                statuJson.put("cname", resStatus.get(index).getCname());
+                statuJson.put("statu", resInfo[index]);
+                statuJson.put("statuText", resStatus.get(index).getTips().get(Integer.valueOf(resInfo[index])));
+                statusJson.put(resStatus.get(index).getName(), statuJson);
             }
 
         }
 
-        return statusArray;
+        return statusJson;
     }
 }

@@ -56,4 +56,17 @@ public class HouseController extends BaseController{
                               HttpServletResponse response){
         outResult(request, response, format, houseService.getAssortList());
     }
+
+    @RequestMapping(value = "achievementHistory.{format}")
+    public void getAchievementHistory(@PathVariable String format,
+                                      HttpServletRequest request,
+                                      HttpServletResponse response,
+                                      @RequestParam("date") String date){
+        User user = houseService.getUserByToken(request.getHeader("token"));
+        if (user == null){
+            outResult(request, response, format, new ResponseEntity(1, "无效token", ""));
+            return;
+        }
+        outResult(request, response, format, houseService.getAchievementHistory(user, date));
+    }
 }

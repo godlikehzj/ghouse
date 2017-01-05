@@ -61,4 +61,71 @@ public class DeviceController extends BaseController {
 
         outResult(request, response, format, deviceService.openDoor(clientId, token, doorId));
     }
+
+    @RequestMapping(value = "sendtemperatureandhumidity.{format}")
+    public void sendtemperatureandhumidity(@PathVariable String format,
+                                           HttpServletRequest request,
+                                           HttpServletResponse response,
+                                           @RequestParam("temperature") String temperature,
+                                           @RequestParam("humidity") int humidity){
+        String clientId = request.getHeader("clientId");
+        clientId = clientId.substring(0, clientId.length() - 1);
+        outResult(request, response, format, deviceService.setTemperatureAndHumidity(clientId, temperature, humidity));
+    }
+
+    @RequestMapping(value = "sendcapacity.{format}")
+    public void sendcapacity(@PathVariable String format,
+                             HttpServletRequest request,
+                             HttpServletResponse response,
+                             @RequestParam("buffer") int buffer,
+                             @RequestParam("capacity") int capacity){
+        String clientId = request.getHeader("clientId");
+        clientId = clientId.substring(0, clientId.length() - 1);
+        outResult(request, response, format, deviceService.setCapacitys(clientId, buffer, capacity));
+    }
+
+    @RequestMapping(value = "sendaq.{format}")
+    public void setAq(@PathVariable String format,
+                      HttpServletRequest request,
+                      HttpServletResponse response,
+                      @RequestParam("aq") int aq){
+        String clientId = request.getHeader("clientId");
+        clientId = clientId.substring(0, clientId.length() - 1);
+        outResult(request, response, format, deviceService.setAq(clientId, aq));
+    }
+
+    @RequestMapping(value = "sendgas.{format}")
+    public void setgas(@PathVariable String format,
+                      HttpServletRequest request,
+                      HttpServletResponse response,
+                      @RequestParam("gas") int gas){
+        String clientId = request.getHeader("clientId");
+        clientId = clientId.substring(0, clientId.length() - 1);
+        outResult(request, response, format, deviceService.setGas(clientId, gas));
+    }
+
+    @RequestMapping(value = "sendweight.{format}")
+    public void setWeight(@PathVariable String format,
+                       HttpServletRequest request,
+                       HttpServletResponse response,
+                       @RequestParam("userId") int userId,
+                          @RequestParam("category") int category,
+                          @RequestParam("weight") int weight){
+        String clientId = request.getHeader("clientId");
+        clientId = clientId.substring(0, clientId.length() - 1);
+        outResult(request, response, format, deviceService.setWeight(clientId, userId, category, weight));
+    }
+
+    @RequestMapping(value = "sendblock.{format}")
+    public void setLock(@PathVariable String format,
+                          HttpServletRequest request,
+                          HttpServletResponse response,
+                          @RequestParam("sn") int sn,
+                          @RequestParam("indoor") int indoor,
+                          @RequestParam("outdoor") int outdoor,
+                        @RequestParam("tank") int tank){
+        String clientId = request.getHeader("clientId");
+        clientId = clientId.substring(0, clientId.length() - 1);
+        outResult(request, response, format, deviceService.setLock(clientId, sn, indoor, outdoor, tank));
+    }
 }

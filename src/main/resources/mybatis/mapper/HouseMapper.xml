@@ -11,4 +11,20 @@
     <select id="getHouseRes" resultType="com.ghouse.bean.HouseRes">
         SELECT id,name,cname FROM house_res WHERE status = 2
     </select>
+
+    <select id="getAchieveHistory" resultType="com.ghouse.bean.AchieveHistory">
+        SELECT * FROM achieve_history WHERE uid = #{uid} AND createDate = date(#{date})
+    </select>
+
+    <update id="updateTemperatureAndHumidity">
+        UPDATE house SET temperature = #{temperature}, humidity = #{humidity} WHERE id = #{clientId}
+    </update>
+
+    <update id="updateAq">
+        UPDATE house SET smoke =#{aq} WHERE id = #{clientId}
+    </update>
+
+    <update id="updateGas">
+        UPDATE house SET gas =#{gas} WHERE id = #{clientId}
+    </update>
 </mapper>
