@@ -12,6 +12,7 @@
 
     <aop:aspectj-autoproxy />
     <import resource="spring-servlet.xml" />
+    <import resource="applicationContext-cache.xml" />
     <import resource="applicationContext-dataSource.xml" />
     <import resource="applicationContext-websocket.xml" />
     <bean class="com.ghouse.utils.SpringContext"></bean>

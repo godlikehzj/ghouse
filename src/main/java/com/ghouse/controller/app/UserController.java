@@ -50,4 +50,13 @@ public class UserController extends BaseController{
                             HttpServletResponse response){
         outResult(request, response, format, userService.getUserInfo(request.getHeader("token")));
     }
+
+    @RequestMapping(value = "changeRole.{format}")
+    public void changeRole(@PathVariable String format,
+                           HttpServletRequest request,
+                           HttpServletResponse response,
+                           @RequestParam("mobile") String mobile,
+                           @RequestParam("role") int role){
+        outResult(request, response, format, userService.changeRole(mobile, role));
+    }
 }

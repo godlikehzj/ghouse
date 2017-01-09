@@ -83,6 +83,16 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>1.4.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.5.2</version>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>1.1.2</version>
@@ -217,6 +227,11 @@
             <artifactId>httpmime</artifactId>
             <version>4.1.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.taobao</groupId>
+            <artifactId>taobao-sdk</artifactId>
+            <version>2016.6.7</version>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId></groupId>-->
             <!--<artifactId></artifactId>-->
@@ -250,6 +265,13 @@
         <!--</dependency>-->
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>nexus-aliyun</id>
+            <name>Nexus aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>

@@ -1,5 +1,7 @@
 package com.ghouse.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
@@ -27,6 +29,11 @@ public class SmsUtil {
         try{
             AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
             System.out.println(rsp.getBody());
+            String result = rsp.getBody();
+            JSONObject jsonObject = JSON.parseObject(result);
+            if (jsonObject.getJSONObject("alibaba_aliqin_fc_sms_num_send_response").getJSONObject("result").getString("err_code").equals("0")){
+                return true;
+            }
 
         }catch (Exception e){
             e.printStackTrace();

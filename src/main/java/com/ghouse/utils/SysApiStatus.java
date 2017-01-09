@@ -54,7 +54,7 @@ public class SysApiStatus {
 
     static {
         captchaMessage.put(captchaCode.OK.ordinal(), "成功");
-        captchaMessage.put(captchaCode.Invalid_mobile.ordinal(),"无效手机号");
+        captchaMessage.put(captchaCode.Invalid_mobile.ordinal(),"用户未登记或已冻结");
         captchaMessage.put(captchaCode.send_limit.ordinal(),"发送验证码限制");
         captchaMessage.put(captchaCode.system_error.ordinal(),"服务异常");
         captchaMessage.put(captchaCode.send_failed.ordinal(),"发送验证码失败");

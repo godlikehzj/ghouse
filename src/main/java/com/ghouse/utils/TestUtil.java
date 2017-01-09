@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * Created by godlikehzj on 2016/12/29.
  */
 public class TestUtil {
-    public static void main (String[] args){
+    public static void main (String[] args) throws Exception{
         TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23592884", "3a251c93d550f894837031eb0e37efdc");
         AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
         req.setExtend("123456");
@@ -30,5 +30,6 @@ public class TestUtil {
         }catch (Exception e){
 
         }
+
     }
 }
