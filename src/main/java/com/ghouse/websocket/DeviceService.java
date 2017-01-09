@@ -93,7 +93,7 @@ public class DeviceService {
     }
 
     public ResponseEntity setGas(String clientId, int gas){
-        houseMapper.updateAq(Long.valueOf(clientId), gas);
+        houseMapper.updateGas(Long.valueOf(clientId), gas);
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
     }
 

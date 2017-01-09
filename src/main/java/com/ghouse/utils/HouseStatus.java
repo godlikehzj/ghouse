@@ -130,14 +130,14 @@ public class HouseStatus {
 
         Status gas = new Status();
         gas.setName("gas");
-        gas.setCname("毒气");
+        gas.setCname("烟气");
         gas.getTips().put(0, "正常");
         gas.getTips().put(1, "异常");
         allstatus.add(gas);
 
         Status smoke = new Status();
-        smoke.setName("smoke");
-        smoke.setCname("烟气");
+        smoke.setName("aq");
+        smoke.setCname("毒气");
         smoke.getTips().put(0, "正常");
         smoke.getTips().put(1, "异常");
         allstatus.add(smoke);

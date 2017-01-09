@@ -21,7 +21,7 @@
     </update>
 
     <update id="updateAq">
-        UPDATE house SET smoke =#{aq} WHERE id = #{clientId}
+        UPDATE house SET aq =#{aq} WHERE id = #{clientId}
     </update>
 
     <update id="updateGas">

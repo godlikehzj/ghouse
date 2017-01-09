@@ -127,10 +127,18 @@ public class HouseService {
             try{
                 PropertyDescriptor pd = new PropertyDescriptor(status.getName(), clazz);
                 Method getMethod = pd.getReadMethod();
-                int statu = (int)getMethod.invoke(houseInfo);
+                Object statu = getMethod.invoke(houseInfo);
 
                 statuJson.put("statu", statu);
-                statuJson.put("statuText", status.getTips().get(statu));
+                String statuText = "";
+                if (status.getName().equals("humidity")){
+                    statuText = statu + "%";
+                }else if (status.getName().equals("temperature")){
+                    statuText = statu + "度";
+                }else{
+                    statuText = status.getTips().get(statu);
+                }
+                statuJson.put("statuText", statuText);
             }catch (Exception e){
                 e.printStackTrace();
             }
