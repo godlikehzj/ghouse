@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ghouse.service.mapper.PayMapper">
+
+    <select id="getPayOrders" resultType="com.ghouse.bean.PayOrder">
+        SELECT h.hname as house_name, co.name, co.description, co.price, p.createTime
+        FROM house h,pay_orders p, commodity co
+        WHERE p.uid = #{uid} and h.id = p.hid and co.id = p.commodityId GROUP BY p.createTime;
+    </select>
+</mapper>

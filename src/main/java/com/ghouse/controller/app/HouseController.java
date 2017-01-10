@@ -47,7 +47,7 @@ public class HouseController extends BaseController{
             outResult(request, response, format, new ResponseEntity(1, "无效token", ""));
             return;
         }
-        outResult(request, response, format, houseService.processHandle(user, houseId, res_name));
+//        outResult(request, response, format, houseService.processHandle(user, houseId, res_name));
     }
 
     @RequestMapping(value = "assortlist.{format}")
