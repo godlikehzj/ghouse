@@ -18,4 +18,9 @@ public interface HouseMapper {
                                              @Param("humidity") int humidity);
     public void updateAq(@Param("clientId") long clientId, @Param("aq") int aq);
     public void updateGas(@Param("clientId") long clientId, @Param("gas") int gas);
+    public void updateCapacity(@Param("clientId") long clientId, @Param("capacity") int capacity);
+    public void addWeightHistory(@Param("clientId") long clientId,
+                                 @Param("userId") long userId,
+                                 @Param("category") int category,
+                                 @Param("weight") int weight);
 }

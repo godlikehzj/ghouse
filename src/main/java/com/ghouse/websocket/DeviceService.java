@@ -84,6 +84,7 @@ public class DeviceService {
     }
 
     public ResponseEntity setCapacitys(String clientId, int buffer, int capacity){
+        houseMapper.updateCapacity(Long.valueOf(clientId), capacity);
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
     }
 
@@ -99,6 +100,7 @@ public class DeviceService {
 
     public ResponseEntity setWeight(String clientId, int userId, int category, int weight){
 //        houseMapper.updateAq(Long.valueOf(clientId), gas);
+        houseMapper.addWeightHistory(Long.valueOf(clientId), userId, category, weight);
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
     }
 

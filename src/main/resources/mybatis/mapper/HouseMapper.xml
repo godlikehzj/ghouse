@@ -27,4 +27,13 @@
     <update id="updateGas">
         UPDATE house SET gas =#{gas} WHERE id = #{clientId}
     </update>
+
+    <update id="updateCapacity">
+        UPDATE house SET capacity=#{capacity} WHERE id = #{clientId}
+    </update>
+
+    <insert id="addWeightHistory">
+        INSERT INTO weight_history(hid, uid, category, weight, createTime) VALUES
+        (#{clientId}, #{userId}, #{category}, #{weight}, now())
+    </insert>
 </mapper>
