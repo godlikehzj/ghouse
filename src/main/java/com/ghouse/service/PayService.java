@@ -1,7 +1,9 @@
 package com.ghouse.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ghouse.bean.Commodity;
 import com.ghouse.bean.PayOrder;
 import com.ghouse.bean.User;
 import com.ghouse.service.mapper.PayMapper;
@@ -10,6 +12,7 @@ import com.ghouse.utils.SysApiStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -20,14 +23,19 @@ public class PayService {
     @Autowired
     private PayMapper payMapper;
 
+    public ResponseEntity getCommodityList(){
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK),
+                JSON.toJSON(payMapper.getCommodityList()));
+    }
+
     public ResponseEntity getCommodity(int houseId, int doorId){
         if (doorId > 9){
             return  new ResponseEntity(2, "invalid house id or door id", "");
         }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("price", 1500);
 
-        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), jsonObject);
+        Commodity commodity = payMapper.getCommodity(doorId);
+
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), commodity == null?"":JSON.toJSON(commodity));
     }
 
     public ResponseEntity prepay(User user, int doorId, String pay_method){
@@ -54,10 +62,32 @@ public class PayService {
         }
     }
 
-    public ResponseEntity getOrders(User user){
-        List<PayOrder> orderList = payMapper.getPayOrders(user.getId());
+    public ResponseEntity getOrders(User user, Integer commodityId){
+        List<PayOrder> orderList;
+        if (commodityId == null){
+            orderList = payMapper.getPayOrders(user.getId());
+        }else{
+            orderList = payMapper.getFilterPayOrders(user.getId(), commodityId);
+        }
 
-        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), JSON.toJSON(orderList));
+        JSONArray jsonArray = new JSONArray();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = "";
+        for(PayOrder order : orderList){
+            String date = sf.format(order.getCreateTime());
+            if (!currentDate.equals(date)){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("date", date);
+                JSONArray currentArray = new JSONArray();
+                currentArray.add(JSON.toJSON(order));
+                jsonObject.put("orders", currentArray);
+                currentDate = date;
+                jsonArray.add(jsonObject);
+            }else{
+               jsonArray.getJSONObject(jsonArray.size() - 1).getJSONArray("orders").add(JSON.toJSON(order));
+            }
+        }
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), jsonArray);
     }
 
 }

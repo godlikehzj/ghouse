@@ -50,12 +50,12 @@ public class HouseController extends BaseController{
 //        outResult(request, response, format, houseService.processHandle(user, houseId, res_name));
     }
 
-    @RequestMapping(value = "assortlist.{format}")
-    public void getAssortList(@PathVariable String format,
-                              HttpServletRequest request,
-                              HttpServletResponse response){
-        outResult(request, response, format, houseService.getAssortList());
-    }
+//    @RequestMapping(value = "assortlist.{format}")
+//    public void getAssortList(@PathVariable String format,
+//                              HttpServletRequest request,
+//                              HttpServletResponse response){
+//        outResult(request, response, format, houseService.getAssortList());
+//    }
 
     @RequestMapping(value = "achievementHistory.{format}")
     public void getAchievementHistory(@PathVariable String format,

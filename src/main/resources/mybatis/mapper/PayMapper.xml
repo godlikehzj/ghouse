@@ -5,6 +5,20 @@
     <select id="getPayOrders" resultType="com.ghouse.bean.PayOrder">
         SELECT h.hname as house_name, co.name, co.description, co.price, p.createTime
         FROM house h,pay_orders p, commodity co
-        WHERE p.uid = #{uid} and h.id = p.hid and co.id = p.commodityId GROUP BY p.createTime;
+        WHERE p.uid = #{userId} and h.id = p.hid and co.id = p.commodityId ORDER BY p.createTime DESC;
+    </select>
+
+    <select id="getFilterPayOrders" resultType="com.ghouse.bean.PayOrder">
+        SELECT h.hname as house_name, co.name, co.description, co.price, p.createTime
+        FROM house h,pay_orders p, commodity co
+        WHERE p.uid = #{userId} and h.id = p.hid and p.commodityId = #{commodityId} and co.id = p.commodityId ORDER BY p.createTime DESC ;
+    </select>
+
+    <select id="getCommodity" resultType="com.ghouse.bean.Commodity">
+        SELECT co.name, co.description, co.price, co.id FROM house_res as r, commodity as co WHERE r.doorId = #{doorId} and r.name = co.name;
+    </select>
+
+    <select id="getCommodityList" resultType="com.ghouse.bean.Commodity">
+        SELECT * FROM commodity;
     </select>
 </mapper>
