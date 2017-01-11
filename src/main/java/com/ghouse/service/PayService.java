@@ -47,7 +47,7 @@ public class PayService {
             jsonObject.put("appid", "wx8888888888888888");
             jsonObject.put("partnerid", "1900000109");
             jsonObject.put("prepayid", "WX1217752501201407033233368018");
-            jsonObject.put("package", "Sign=WXPay");
+            jsonObject.put("packageValue", "Sign=WXPay");
             jsonObject.put("noncestr", "5K8264ILTKCH16CQ2502SI8ZNMTM67VS");
             jsonObject.put("timestamp", "1412000000");
             jsonObject.put("sign", "C380BEC2BFD727A4B6845133519F3AD6");
@@ -81,10 +81,13 @@ public class PayService {
                 JSONArray currentArray = new JSONArray();
                 currentArray.add(JSON.toJSON(order));
                 jsonObject.put("orders", currentArray);
+                jsonObject.put("total_pay", order.getPrice());
                 currentDate = date;
                 jsonArray.add(jsonObject);
             }else{
-               jsonArray.getJSONObject(jsonArray.size() - 1).getJSONArray("orders").add(JSON.toJSON(order));
+                JSONObject temp = jsonArray.getJSONObject(jsonArray.size() - 1);
+                temp.getJSONArray("orders").add(JSON.toJSON(order));
+                temp.put("total_pay", temp.getInteger("total_pay") + Integer.valueOf(order.getPrice()));
             }
         }
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), jsonArray);

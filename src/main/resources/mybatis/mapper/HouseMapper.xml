@@ -8,8 +8,12 @@
         ]]>
     </select>
 
-    <select id="getHouseRes" resultType="com.ghouse.bean.HouseRes">
-        SELECT id,name,cname FROM house_res WHERE status = 2
+    <select id="getHouseStateStatus" resultType="com.ghouse.bean.HouseStatu">
+        SELECT * FROM house_state;
+    </select>
+
+    <select id="getHouseResStatus" resultType="com.ghouse.bean.HouseStatu">
+        SELECT * FROM house_res;
     </select>
 
     <select id="getAchieveHistory" resultType="com.ghouse.bean.AchieveHistory">

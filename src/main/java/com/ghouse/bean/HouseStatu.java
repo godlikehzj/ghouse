@@ -3,18 +3,13 @@ package com.ghouse.bean;
 /**
  * Created by godlikehzj on 2017/1/5.
  */
-public class HouseRes {
+public class HouseStatu {
     private long id;
     private String name;
     private String cname;
+    private int status;
 
-    public HouseRes() {
-    }
-
-    public HouseRes(long id, String name, String cname) {
-        this.id = id;
-        this.name = name;
-        this.cname = cname;
+    public HouseStatu() {
     }
 
     public long getId() {
@@ -39,5 +34,13 @@ public class HouseRes {
 
     public void setCname(String cname) {
         this.cname = cname;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

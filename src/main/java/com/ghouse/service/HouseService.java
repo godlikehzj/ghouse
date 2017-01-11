@@ -43,9 +43,6 @@ public class HouseService {
         }
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK),jsonArray);
     }
-    public ResponseEntity getAssortList(){
-        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), houseMapper.getHouseRes());
-    }
 
     public User getUserByToken(String token){
         return userMapper.getUserByToken(token);
