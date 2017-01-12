@@ -1,10 +1,12 @@
 package com.ghouse.service.mapper;
 
 import com.ghouse.bean.AchieveHistory;
+import com.ghouse.bean.HandleHistory;
 import com.ghouse.bean.HouseInfo;
 import com.ghouse.bean.HouseStatu;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,4 +26,7 @@ public interface HouseMapper {
                                  @Param("userId") long userId,
                                  @Param("category") int category,
                                  @Param("weight") int weight);
+    public HandleHistory getHandleHistory(@Param("uid") long uid, @Param("hid") long hid);
+    public void updateHandleStatu(@Param("id") long id, @Param("statu") int statu);
+    public void addHandleStatu(@Param("uid") long uid, @Param("hid") long hid);
 }

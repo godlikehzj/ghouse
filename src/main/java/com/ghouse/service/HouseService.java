@@ -2,9 +2,7 @@ package com.ghouse.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ghouse.bean.AchieveHistory;
-import com.ghouse.bean.HouseInfo;
-import com.ghouse.bean.User;
+import com.ghouse.bean.*;
 import com.ghouse.service.mapper.HouseMapper;
 import com.ghouse.service.mapper.UserMapper;
 import com.ghouse.utils.HouseStatus;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +28,25 @@ public class HouseService {
     private HouseMapper houseMapper;
 
     private HouseStatus houseStatus = HouseStatus.getInstance();
+
+    public ResponseEntity processHandle(User user, long houseId, int type){
+        HandleHistory handleHistory = houseMapper.getHandleHistory(user.getId(), houseId);
+        if (type == 1){
+            if (handleHistory != null){
+                return new ResponseEntity(2, "being handled", "");
+            }else{
+                houseMapper.addHandleStatu(user.getId(), houseId);
+                return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), HouseStatus.expireTime);
+            }
+        }else{
+            if (handleHistory == null){
+                return new ResponseEntity(3, "not being handled", "");
+            }else{
+                houseMapper.updateHandleStatu(handleHistory.getId(), 0);
+                return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), 0);
+            }
+        }
+    }
 
     public ResponseEntity getAchievementHistory(User user, String date){
         List<AchieveHistory> lists = houseMapper.getAchieveHistory(user.getId(), date);
@@ -95,10 +113,8 @@ public class HouseService {
 
                 if (user.getRole() == 1){
                     housejson.put("status", getSortStatus(houseInfo));
-                }else if (user.getRole() == 2){
-                    housejson.put("status", getResStatus(houseInfo, houseStatus.getRemove()));
-                }else if (user.getRole() == 3){
-                    housejson.put("status", getResStatus(houseInfo, houseStatus.getRecover()));
+                }else{
+                    housejson.put("status", getResStatus(user.getId(), houseInfo, user.getRole()));
                 }
 
                 jsonArray.add(housejson);
@@ -116,7 +132,12 @@ public class HouseService {
      */
     private JSONObject getSortStatus(HouseInfo houseInfo){
         JSONObject statusJson = new JSONObject();
-        for (HouseStatus.Status status : houseStatus.getAllstatus()){
+        List<HouseStatu> stateStatus = houseStatus.getStateStatus();
+        if (stateStatus == null){
+            stateStatus = houseMapper.getHouseStateStatus();
+            houseStatus.setStateStatus(stateStatus);
+        }
+        for (HouseStatu status : stateStatus){
             JSONObject statuJson = new JSONObject();
             statuJson.put("cname", status.getCname());
 
@@ -133,7 +154,7 @@ public class HouseService {
                 }else if (status.getName().equals("temperature")){
                     statuText = statu + "度";
                 }else{
-                    statuText = status.getTips().get(statu);
+                    statuText = houseStatus.stateText.get(statu);
                 }
                 statuJson.put("statuText", statuText);
             }catch (Exception e){
@@ -146,28 +167,52 @@ public class HouseService {
     }
 
     /**
-     * 获取清运员和回收员所关注的资源状态
+     * 获取清运员和回收员所关注的资源状
      * @param houseInfo
-     * @param auths
      * @return
      */
-    private JSONObject getResStatus(HouseInfo houseInfo, int[] auths){
+    private JSONObject getResStatus(long uid, HouseInfo houseInfo, int role){
         JSONObject statusJson = new JSONObject();
+        int resStatu = 0;
+        String resText = "";
         if (houseInfo.getRes_info().isEmpty()){
             return statusJson;
         }
         String[] resInfo = houseInfo.getRes_info().split(",");
-        List<HouseStatus.Status> resStatus = houseStatus.getResStatus();
-        for (int i = 0; i < auths.length; i++){
-            int index = auths[i] - 1 ;
-            if (resStatus.size() > index && resInfo.length > index){
-                JSONObject statuJson = new JSONObject();
-                statuJson.put("cname", resStatus.get(index).getCname());
-                statuJson.put("statu", resInfo[index]);
-                statuJson.put("statuText", resStatus.get(index).getTips().get(Integer.valueOf(resInfo[index])));
-                statusJson.put(resStatus.get(index).getName(), statuJson);
+        List<HouseStatu> resStatus = houseStatus.getResStatus();
+        if (resStatus == null){
+            resStatus = houseMapper.getHouseResStatus();
+            houseStatus.setResStatus(resStatus);
+        }
+        for(int index = 0; index < resStatus.size(); index ++){
+            if (index >= resInfo.length){
+                break;
             }
+            HouseStatu statu = resStatus.get(index);
+            if (statu.getStatus() == role && resInfo[index].equals("1")){
+                resStatu = 1;
+                if (!resText.isEmpty()){
+                    resText += "、";
+                }
+                resText += statu.getCname();
+            }
+        }
 
+        if (resStatu == 1){
+            resText += "已满";
+        }
+        statusJson.put("statu", resStatu);
+        statusJson.put("statuText", resText);
+        HandleHistory handleHistory = houseMapper.getHandleHistory(uid, houseInfo.getId());
+        if (handleHistory != null){
+            Date now = new Date();
+            long expire = now.getTime() - handleHistory.getHandleTime().getTime();
+            if (expire > 15 * 60 * 1000){
+                houseMapper.updateHandleStatu(handleHistory.getId(), 0);
+            }else{
+                statusJson.put("expire_in", HouseStatus.expireTime - expire);
+                statusJson.put("statu", 2);
+            }
         }
 
         return statusJson;

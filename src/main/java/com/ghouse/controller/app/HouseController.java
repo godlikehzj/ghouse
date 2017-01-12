@@ -40,14 +40,14 @@ public class HouseController extends BaseController{
     public void handlehouse(@PathVariable String format,
                             HttpServletRequest request,
                             HttpServletResponse response,
-                            @RequestParam("houseId") String houseId,
-                            @RequestParam("res_name") String res_name){
+                            @RequestParam("houseId") Long houseId,
+                            @RequestParam("type") int type){
         User user = houseService.getUserByToken(request.getHeader("token"));
         if (user == null){
             outResult(request, response, format, new ResponseEntity(1, "无效token", ""));
             return;
         }
-//        outResult(request, response, format, houseService.processHandle(user, houseId, res_name));
+        outResult(request, response, format, houseService.processHandle(user, houseId, type));
     }
 
 //    @RequestMapping(value = "assortlist.{format}")

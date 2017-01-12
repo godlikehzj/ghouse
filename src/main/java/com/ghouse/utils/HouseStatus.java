@@ -14,24 +14,26 @@ import java.util.Map;
  * Created by zhijunhu on 2016/12/29.
  */
 public class HouseStatus {
-    @Autowired
     private HouseMapper houseMapper;
 
-    private static HouseStatus houseStatus = new HouseStatus();
+    private static HouseStatus houseStatus;
     private List<HouseStatu> stateStatus;
     private List<HouseStatu> resStatus;
     private int[] recover = {1,2,3,4,5,6,7,8};
     private int[] remove = {1,8};
+    public Map<Integer, String> stateText;
+    public static long expireTime = 15 * 60 * 1000;
+
     public static String hanleStatu = "9";
 
     public static HouseStatus getInstance(){
+        if (houseStatus == null){
+            houseStatus = new HouseStatus();
+        }
         return houseStatus;
     }
 
     public List<HouseStatu> getStateStatus() {
-        if (stateStatus.size() == 0){
-            stateStatus = houseMapper.getHouseStateStatus();
-        }
         return stateStatus;
     }
 
@@ -40,9 +42,6 @@ public class HouseStatus {
     }
 
     public List<HouseStatu> getResStatus() {
-        if (resStatus.size() == 0){
-            resStatus = houseMapper.getHouseResStatus();
-        }
         return resStatus;
     }
 
@@ -67,7 +66,8 @@ public class HouseStatus {
     }
 
     private HouseStatus(){
-        resStatus = new ArrayList<>();
-        resStatus = new ArrayList<>();
+        stateText = new HashMap<>();
+        stateText.put(0, "未满");
+        stateText.put(1, "已满");
     }
 }

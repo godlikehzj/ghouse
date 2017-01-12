@@ -13,7 +13,7 @@
     </select>
 
     <select id="getHouseResStatus" resultType="com.ghouse.bean.HouseStatu">
-        SELECT * FROM house_res;
+        SELECT * FROM house_res ORDER BY doorId;
     </select>
 
     <select id="getAchieveHistory" resultType="com.ghouse.bean.AchieveHistory">
@@ -39,5 +39,17 @@
     <insert id="addWeightHistory">
         INSERT INTO weight_history(hid, uid, category, weight, createTime) VALUES
         (#{clientId}, #{userId}, #{category}, #{weight}, now())
+    </insert>
+
+    <select id="getHandleHistory" resultType="com.ghouse.bean.HandleHistory">
+        SELECT * FROM handle_history WHERE uid = #{uid} and hid = #{hid} and handle_statu = 1;
+    </select>
+
+    <update id="updateHandleStatu">
+        UPDATE handle_history SET handle_statu = #{statu} WHERE id = #{id};
+    </update>
+
+    <insert id="addHandleStatu">
+        INSERT INTO handle_history(uid, hid, handle_statu, handleTime) VALUES (#{uid}, #{hid}, 1, now());
     </insert>
 </mapper>
