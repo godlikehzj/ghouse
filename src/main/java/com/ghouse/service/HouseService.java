@@ -32,9 +32,14 @@ public class HouseService {
     public ResponseEntity processHandle(User user, long houseId, int type){
         HandleHistory handleHistory = houseMapper.getHandleHistory(user.getId(), houseId);
         if (type == 1){
-            if (handleHistory != null){
+            List<HandleHistory> list = houseMapper.getHandleByHouseId(houseId);
+            if ((list != null && list.size() > 0) || handleHistory != null){
                 return new ResponseEntity(2, "being handled", "");
             }else{
+                List<HandleHistory> userList = houseMapper.getHandleByUserId(user.getId());
+                if (userList != null && userList.size() > 0){
+                    return new ResponseEntity(4, "another house is being handled", "");
+                }
                 houseMapper.addHandleStatu(user.getId(), houseId);
                 return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), HouseStatus.expireTime);
             }
@@ -114,7 +119,7 @@ public class HouseService {
                 if (user.getRole() == 1){
                     housejson.put("status", getSortStatus(houseInfo));
                 }else{
-                    housejson.put("status", getResStatus(user.getId(), houseInfo, user.getRole()));
+                    housejson.put("resource", getResStatus(user.getId(), houseInfo, user.getRole()));
                 }
 
                 jsonArray.add(housejson);

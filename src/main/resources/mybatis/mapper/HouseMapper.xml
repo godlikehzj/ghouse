@@ -45,6 +45,14 @@
         SELECT * FROM handle_history WHERE uid = #{uid} and hid = #{hid} and handle_statu = 1;
     </select>
 
+    <select id="getHandleByHouseId" resultType="com.ghouse.bean.HandleHistory">
+        SELECT * FROM handle_history WHERE hid = #{hid} AND handle_statu =1;
+    </select>
+
+    <select id="getHandleByUserId" resultType="com.ghouse.bean.HandleHistory">
+        SELECT * FROM handle_history WHERE uid = #{uid} AND handle_statu =1;
+    </select>
+
     <update id="updateHandleStatu">
         UPDATE handle_history SET handle_statu = #{statu} WHERE id = #{id};
     </update>

@@ -27,6 +27,8 @@ public interface HouseMapper {
                                  @Param("category") int category,
                                  @Param("weight") int weight);
     public HandleHistory getHandleHistory(@Param("uid") long uid, @Param("hid") long hid);
+    public List<HandleHistory> getHandleByHouseId(@Param("hid") long hid);
+    public List<HandleHistory> getHandleByUserId(@Param("uid") long uid);
     public void updateHandleStatu(@Param("id") long id, @Param("statu") int statu);
     public void addHandleStatu(@Param("uid") long uid, @Param("hid") long hid);
 }
