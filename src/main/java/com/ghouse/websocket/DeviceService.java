@@ -1,8 +1,10 @@
 package com.ghouse.websocket;
 
+import com.ghouse.bean.HouseStatu;
 import com.ghouse.bean.User;
 import com.ghouse.service.mapper.HouseMapper;
 import com.ghouse.service.mapper.UserMapper;
+import com.ghouse.utils.HouseStatus;
 import com.ghouse.utils.ResponseEntity;
 import com.ghouse.utils.SysApiStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +49,28 @@ public class DeviceService {
     public ResponseEntity openDoor(String clientId, String token, String doorId){
         User user = userMapper.getUserByToken(token);
         if (user == null){
-            return new ResponseEntity(1, "无效token", "");
+            return new ResponseEntity(2, "无效token", "");
         }
+        boolean auth = false;
+        String[] houseIds = user.getHouseIds().split(",");
+        for (String houseId : houseIds){
+            if (houseId.equals(clientId.substring(0, clientId.length() -1))){
+                auth = true;
+            }
+        }
+
+        if (!auth){
+            return new ResponseEntity(3, "无权限", "");
+        }
+
+        if (clientId.charAt(clientId.length() - 1) == '3'){
+            for(int door : HouseStatus.recover){
+                if (door == Integer.valueOf(doorId)){
+                    return new ResponseEntity(4, "该操作需支付完成", "");
+                }
+            }
+        }
+
         String updateUserId = clientId;
         updateUserId = updateUserId.replace(updateUserId.charAt(updateUserId.length() - 1), '2');
         if (handler.sendMessage(updateUserId, String.valueOf(user.getId())) == 1){
