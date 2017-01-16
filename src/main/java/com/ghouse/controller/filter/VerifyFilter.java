@@ -30,7 +30,9 @@ public class VerifyFilter implements Filter{
 //		}
 //		ResponseEntity responseEntity = checkParam(paramMap);
         ResponseEntity responseEntity = null;
-        if (((HttpServletRequest) request).getRequestURI().contains("/device/") && !((HttpServletRequest) request).getRequestURI().contains("/device/send.json")){
+        if (((HttpServletRequest) request).getRequestURI().contains("/device/") &&
+                !((HttpServletRequest) request).getRequestURI().contains("/device/send.json") &&
+                !((HttpServletRequest) request).getRequestURI().contains("/device/getQrcode")){
             responseEntity = checkHeads(req);
         }
 

@@ -156,8 +156,10 @@ public class HouseService {
                 String statuText = "";
                 if (status.getName().equals("humidity")){
                     statuText = statu + "%";
+                    statuJson.put("statu", 0);
                 }else if (status.getName().equals("temperature")){
                     statuText = statu + "度";
+                    statuJson.put("statu", 0);
                 }else{
                     statuText = houseStatus.stateText.get(statu);
                 }

@@ -49,6 +49,8 @@ public class DeviceService {
         if (user == null){
             return new ResponseEntity(1, "无效token", "");
         }
+
+        if (clientId)
         String updateUserId = clientId;
         updateUserId = updateUserId.replace(updateUserId.charAt(updateUserId.length() - 1), '2');
         if (handler.sendMessage(updateUserId, String.valueOf(user.getId())) == 1){

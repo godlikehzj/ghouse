@@ -1,6 +1,7 @@
 package com.ghouse.controller.device;
 
 import com.ghouse.controller.base.BaseController;
+import com.ghouse.utils.QrcodeUtil;
 import com.ghouse.websocket.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -127,5 +128,31 @@ public class DeviceController extends BaseController {
         String clientId = request.getHeader("clientId");
         clientId = clientId.substring(0, clientId.length() - 1);
         outResult(request, response, format, deviceService.setLock(clientId, sn, indoor, outdoor, tank));
+    }
+
+    @RequestMapping(value = "getQrcode.{format}")
+    public void getQrcode(@PathVariable String format,
+                          HttpServletRequest request,
+                          HttpServletResponse response,
+                          String clientId,
+                          String doorId,
+                          Integer width,
+                          Integer height){
+        if (null == width){
+            width = QrcodeUtil.defaultWidth;
+        }
+
+        if (null == height){
+            height = QrcodeUtil.defaultHeight;
+        }
+
+        if (null == format){
+            format = QrcodeUtil.defaultFormat;
+        }
+        try {
+            QrcodeUtil.OutputQrcodeStream("c="+clientId + "&" + "d="+doorId, response.getOutputStream(), width, height, format);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
