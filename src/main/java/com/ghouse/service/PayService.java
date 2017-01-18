@@ -7,6 +7,7 @@ import com.ghouse.bean.Commodity;
 import com.ghouse.bean.PayOrder;
 import com.ghouse.bean.User;
 import com.ghouse.service.mapper.PayMapper;
+import com.ghouse.utils.AlipayUtil;
 import com.ghouse.utils.ResponseEntity;
 import com.ghouse.utils.SysApiStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by zhijunhu on 2017/1/10.
@@ -23,6 +25,10 @@ public class PayService {
     @Autowired
     private PayMapper payMapper;
 
+    private String generateSn(){
+        Random random = new Random();
+        return "SN" + System.currentTimeMillis() + random.nextInt(100);
+    }
     public ResponseEntity getCommodityList(){
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK),
                 JSON.toJSON(payMapper.getCommodityList()));
@@ -38,10 +44,14 @@ public class PayService {
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), commodity == null?"":JSON.toJSON(commodity));
     }
 
-    public ResponseEntity prepay(User user, int doorId, String pay_method){
+    public ResponseEntity prepay(User user, int houseId, int doorId, String pay_method){
         if (doorId > 9){
             return  new ResponseEntity(2, "invalid house id or door id", "");
         }
+        Commodity commodity = payMapper.getCommodity(doorId);
+        String orderSn = generateSn();
+        payMapper.createOrder(user.getId(), houseId, orderSn, (int)commodity.getId(), pay_method);
+
         if (pay_method.equals("wechat_sdk")){
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("appid", "wx8888888888888888");
@@ -55,7 +65,8 @@ public class PayService {
             return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), jsonObject);
 
         }else if (pay_method.equals("alipay_sdk")){
-            String orderStr = "app_id=2015052600090779&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.02%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22314VYGIAGG7ZOYY%22%7D&charset=utf-8&method=alipay.trade.app.pay&sign_type=RSA2&timestamp=2016-08-15%2012%3A12%3A15&version=1.0&sign=MsbylYkCzlfYLy9PeRwUUIg9nZPeN9SfXPNavUCroGKR5Kqvx0nEnd3eRmKxJuthNUx4ERCXe552EV9PfwexqW%2B1wbKOdYtDIb4%2B7PL3Pc94RZL0zKaWcaY3tSL89%2FuAVUsQuFqEJdhIukuKygrXucvejOUgTCfoUdwTi7z%2BZzQ%3D";
+            double price = (double)commodity.getPrice() / 100;
+            String orderStr = AlipayUtil.getPrepay(commodity.getName(), orderSn, String.valueOf(price));
             return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), orderStr);
         }else {
             return new ResponseEntity(3, "invalid pay method", "");

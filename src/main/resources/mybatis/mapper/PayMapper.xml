@@ -21,4 +21,8 @@
     <select id="getCommodityList" resultType="com.ghouse.bean.Commodity">
         SELECT * FROM commodity;
     </select>
+
+    <insert id="createOrder">
+        INSERT INTO pay_orders(uid, orderSn, commodityId, status, createTime, hid, pay_method) VALUES (#{uid}, #{orderSn}, #{commodityId}, 1, now(), #{hid}, #{pay_method})
+    </insert>
 </mapper>
