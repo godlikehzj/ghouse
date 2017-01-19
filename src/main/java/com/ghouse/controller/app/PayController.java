@@ -56,7 +56,7 @@ public class PayController extends BaseController {
             return;
         }
 
-        outResult(request, response, format, payService.prepay(user, doorId, pay_method));
+        outResult(request, response, format, payService.prepay(user, houseId, doorId, pay_method));
     }
 
     @RequestMapping(value = "getHistoryOrders.{format}")
@@ -70,5 +70,12 @@ public class PayController extends BaseController {
             return;
         }
         outResult(request, response, format, payService.getOrders(user, commodityId));
+    }
+
+    @RequestMapping(value = "result_notify.{format}")
+    public void payResultNotify(@PathVariable String format,
+                                HttpServletRequest request,
+                                HttpServletResponse response){
+
     }
 }
