@@ -19,8 +19,8 @@ public class HouseStatus {
     private static HouseStatus houseStatus;
     private List<HouseStatu> stateStatus;
     private List<HouseStatu> resStatus;
-    private int[] recover = {1,2,3,4,5,6,7,8};
-    private int[] remove = {1,8};
+    public static int[] recover = {4,5,6,7,8};
+    public static int[] remove = {0,1,2,3};
     public Map<Integer, String> stateText;
     public static long expireTime = 15 * 60 * 1000;
 
@@ -47,22 +47,6 @@ public class HouseStatus {
 
     public void setResStatus(List<HouseStatu> resStatus) {
         this.resStatus = resStatus;
-    }
-
-    public int[] getRecover() {
-        return recover;
-    }
-
-    public void setRecover(int[] recover) {
-        this.recover = recover;
-    }
-
-    public int[] getRemove() {
-        return remove;
-    }
-
-    public void setRemove(int[] remove) {
-        this.remove = remove;
     }
 
     private HouseStatus(){
