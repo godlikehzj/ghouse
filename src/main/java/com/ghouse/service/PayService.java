@@ -65,8 +65,10 @@ public class PayService {
             return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), jsonObject);
 
         }else if (pay_method.equals("alipay_sdk")){
+            String orderStr = "";
             double price = (double)commodity.getPrice() / 100;
-            String orderStr = AlipayUtil.getPrepay(commodity.getName(), orderSn, String.valueOf(price));
+            orderStr = AlipayUtil.getPrepay(commodity.getName(), orderSn, String.valueOf(price));
+
             return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), orderStr);
         }else {
             return new ResponseEntity(3, "invalid pay method", "");

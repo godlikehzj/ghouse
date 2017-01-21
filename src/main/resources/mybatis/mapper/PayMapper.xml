@@ -5,13 +5,13 @@
     <select id="getPayOrders" resultType="com.ghouse.bean.PayOrder">
         SELECT h.hname as house_name, co.name, co.description, co.price, p.createTime
         FROM house h,pay_orders p, commodity co
-        WHERE p.uid = #{userId} and h.id = p.hid and co.id = p.commodityId ORDER BY p.createTime DESC;
+        WHERE p.status = 0 and p.uid = #{userId} and h.id = p.hid and co.id = p.commodityId ORDER BY p.createTime DESC;
     </select>
 
     <select id="getFilterPayOrders" resultType="com.ghouse.bean.PayOrder">
         SELECT h.hname as house_name, co.name, co.description, co.price, p.createTime
         FROM house h,pay_orders p, commodity co
-        WHERE p.uid = #{userId} and h.id = p.hid and p.commodityId = #{commodityId} and co.id = p.commodityId ORDER BY p.createTime DESC ;
+        WHERE p.status = 0 and p.uid = #{userId} and h.id = p.hid and p.commodityId = #{commodityId} and co.id = p.commodityId ORDER BY p.createTime DESC ;
     </select>
 
     <select id="getCommodity" resultType="com.ghouse.bean.Commodity">

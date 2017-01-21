@@ -127,7 +127,7 @@ public class DeviceController extends BaseController {
                         @RequestParam("tank") int tank){
         String clientId = request.getHeader("clientId");
         clientId = clientId.substring(0, clientId.length() - 1);
-        outResult(request, response, format, deviceService.setLock(clientId, sn, indoor, outdoor, tank));
+        outResult(request, response, format, deviceService.setblock(clientId, sn, indoor, outdoor, tank));
     }
 
     @RequestMapping(value = "getQrcode.{format}")

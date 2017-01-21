@@ -1,5 +1,6 @@
 package com.ghouse.websocket;
 
+import com.ghouse.bean.HouseInfo;
 import com.ghouse.bean.User;
 import com.ghouse.service.mapper.HouseMapper;
 import com.ghouse.service.mapper.UserMapper;
@@ -104,8 +105,31 @@ public class DeviceService {
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
     }
 
-    public ResponseEntity setLock(String clientId, int pn, int indoor, int outdoor, int tank){
+    public ResponseEntity setblock(String clientId, int pn, int indoor, int outdoor, int tank){
 //        houseMapper.updateAq(Long.valueOf(clientId), gas);
+        HouseInfo houseInfo = houseMapper.getHouseInfo(clientId);
+        if (houseInfo == null){
+            return new ResponseEntity(1, "house not exist", "");
+        }
+
+        StringBuilder indoorlist = new StringBuilder(houseInfo.getIndoor());
+        StringBuilder outdoorlist = new StringBuilder(houseInfo.getOutdoor());
+        StringBuilder resinfolist = new StringBuilder(houseInfo.getRes_info());
+
+        if (pn < indoorlist.length()){
+            indoorlist.replace(pn, pn + 1, String.valueOf(indoor));
+        }
+
+        if (pn < outdoorlist.length()){
+            outdoorlist.replace(pn, pn + 1, String.valueOf(outdoor));
+        }
+
+        if (pn < resinfolist.length()){
+            resinfolist.replace(pn, pn + 1, String.valueOf(tank));
+        }
+
+        houseMapper.updateBlock(Long.valueOf(clientId), indoorlist.toString(), outdoorlist.toString(), resinfolist.toString());
+
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
     }
 }

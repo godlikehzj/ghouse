@@ -18,25 +18,10 @@ public class HouseInfo {
     private String res_info;
     private double lng;
     private double lat;
+    private String indoor;
+    private String outdoor;
 
     public HouseInfo() {
-    }
-
-    public HouseInfo(long id, String hname, String addr, int status, String temperature, int humidity, int gas, int aq, int door, int lamp, int capacity, String res_info, double lng, double lat) {
-        this.id = id;
-        this.hname = hname;
-        this.addr = addr;
-        this.status = status;
-        this.temperature = temperature;
-        this.humidity = humidity;
-        this.gas = gas;
-        this.aq = aq;
-        this.door = door;
-        this.lamp = lamp;
-        this.capacity = capacity;
-        this.res_info = res_info;
-        this.lng = lng;
-        this.lat = lat;
     }
 
     public long getId() {
@@ -148,7 +133,24 @@ public class HouseInfo {
         return lat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(double lat)
+    {
         this.lat = lat;
+    }
+
+    public String getIndoor() {
+        return indoor;
+    }
+
+    public void setIndoor(String indoor) {
+        this.indoor = indoor;
+    }
+
+    public String getOutdoor() {
+        return outdoor;
+    }
+
+    public void setOutdoor(String outdoor) {
+        this.outdoor = outdoor;
     }
 }

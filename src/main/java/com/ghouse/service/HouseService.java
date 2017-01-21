@@ -185,18 +185,18 @@ public class HouseService {
         if (houseInfo.getRes_info().isEmpty()){
             return statusJson;
         }
-        String[] resInfo = houseInfo.getRes_info().split(",");
+        String resInfo = houseInfo.getRes_info();
         List<HouseStatu> resStatus = houseStatus.getResStatus();
         if (resStatus == null){
             resStatus = houseMapper.getHouseResStatus();
             houseStatus.setResStatus(resStatus);
         }
         for(int index = 0; index < resStatus.size(); index ++){
-            if (index >= resInfo.length){
+            if (index >= resInfo.length()){
                 break;
             }
             HouseStatu statu = resStatus.get(index);
-            if (statu.getStatus() == role && resInfo[index].equals("1")){
+            if (statu.getStatus() == role && resInfo.charAt(index) == '1'){
                 resStatu = 1;
                 if (!resText.isEmpty()){
                     resText += "、";

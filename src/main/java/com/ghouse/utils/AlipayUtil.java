@@ -135,7 +135,7 @@ public class AlipayUtil {
         param.put("sign_type", "RSA2");
         param.put("timestamp", sf.format(new Date()));
         param.put("version", "1.0");
-        param.put("notify_url", "https://123.56.105.105/ghouse/pay/result_notify.json");
+        param.put("notify_url", "http://123.56.105.105/ghouse/pay/result_notify.json");
 
         Map<String, String> biz = new HashMap<>();
         biz.put("subject", subject);

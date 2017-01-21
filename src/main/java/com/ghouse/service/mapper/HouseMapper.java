@@ -31,4 +31,8 @@ public interface HouseMapper {
     public List<HandleHistory> getHandleByUserId(@Param("uid") long uid);
     public void updateHandleStatu(@Param("id") long id, @Param("statu") int statu);
     public void addHandleStatu(@Param("uid") long uid, @Param("hid") long hid);
+    public void updateBlock(@Param("clientId") long clientId,
+                            @Param("indoor") String indoor,
+                            @Param("outdoor") String outdoor,
+                            @Param("resInfo") String resInfo);
 }

@@ -60,4 +60,8 @@
     <insert id="addHandleStatu">
         INSERT INTO handle_history(uid, hid, handle_statu, handleTime) VALUES (#{uid}, #{hid}, 1, now());
     </insert>
+
+    <update id="updateBlock">
+        UPDATE house SET indoor = #{indoor}, outdoor = #{outdoor}, res_info = #{resInfo} WHERE id= #{clientId};
+    </update>
 </mapper>
