@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -19,16 +20,16 @@ import java.util.*;
  * Created by zhijunhu on 2017/1/18.
  */
 public class AlipayUtil {
-    private static String APP_ID = "2016073100133704";
+    private static String APP_ID = "2017011805185443";
     private static String APP_PRIVATE_KEY = null; // app支付私钥
 
     private static String ALIPAY_PUBLIC_KEY = null; // 支付宝公钥
 
     static {
         try {
-            Resource resource = new ClassPathResource("rsa_private_key_pkcs8.pem");
+            Resource resource = new ClassPathResource("应用私钥2048.txt");
             APP_PRIVATE_KEY = StreamUtil.readText(resource.getInputStream());
-            resource = new ClassPathResource("rsa_public_key.pem");
+            resource = new ClassPathResource("应用公钥2048.txt");
             ALIPAY_PUBLIC_KEY = StreamUtil.readText(resource.getInputStream());
         } catch (Exception e) {
             e.printStackTrace();
@@ -145,6 +146,7 @@ public class AlipayUtil {
 
         param.put("biz_content", JSON.toJSONString(biz));
 //        param.put("sign", getSign(param, APP_PRIVATE_KEY));
+        System.out.println(AlipaySignature.getSignContent(param));
         try{
             String sign = AlipaySignature.rsa256Sign(AlipaySignature.getSignContent(param),APP_PRIVATE_KEY, AlipayConstants.CHARSET_UTF8);
             param.put("sign", sign);
@@ -158,13 +160,17 @@ public class AlipayUtil {
     public static void main(String[] args){
         Map<String, String> param = new HashMap<>();
         param.put("a","123");
-
-        try{
-            String sign = AlipaySignature.rsa256Sign(AlipaySignature.getSignContent(param),APP_PRIVATE_KEY, AlipayConstants.CHARSET_UTF8);
-            System.out.println(sign);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        String orderStr = "";
+        DecimalFormat    df   = new DecimalFormat("######0.00");
+        int priceint = 1500;
+        double price = (double)priceint / 100;
+        System.out.println(df.format(price));
+//        try{
+//            String sign = AlipaySignature.rsa256Sign(AlipaySignature.getSignContent(param),APP_PRIVATE_KEY, AlipayConstants.CHARSET_UTF8);
+//            System.out.println(sign);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
 
 
     }

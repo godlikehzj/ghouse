@@ -13,6 +13,7 @@ import com.ghouse.utils.SysApiStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Random;
@@ -66,8 +67,9 @@ public class PayService {
 
         }else if (pay_method.equals("alipay_sdk")){
             String orderStr = "";
+            DecimalFormat df = new DecimalFormat("######0.00");
             double price = (double)commodity.getPrice() / 100;
-            orderStr = AlipayUtil.getPrepay(commodity.getName(), orderSn, String.valueOf(price));
+            orderStr = AlipayUtil.getPrepay(commodity.getName(), orderSn, df.format(price));
 
             return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), orderStr);
         }else {
