@@ -6,7 +6,8 @@ import com.ghouse.service.mapper.HouseMapper;
 import com.ghouse.service.mapper.UserMapper;
 import com.ghouse.utils.ResponseEntity;
 import com.ghouse.utils.SysApiStatus;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +29,7 @@ public class DeviceService {
 
     private GhwebSocketHandler handler;
 
-    private Logger logger = Logger.getLogger(DeviceService.class);
+    private Logger logger = LoggerFactory.getLogger(DeviceService.class);
 
     public void SetHandler(GhwebSocketHandler hander){
         this.handler = hander;
@@ -97,33 +98,39 @@ public class DeviceService {
             url = SysApiStatus.fileUrl + filename;
         }
 
+        logger.info("device add photo clientId={} userId={} url={}",clientId, userId, url);
         houseMapper.addPhoto(Long.valueOf(clientId.substring(0, clientId.length() -1)), Long.valueOf(userId), url, "");
 
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), url);
     }
 
     public ResponseEntity setTemperatureAndHumidity(String clientId, String temperature, int humidity){
+        logger.info("device set clientId={} Temperature={} Humidity={}",clientId, temperature, humidity);
         houseMapper.updateTemperatureAndHumidity(Long.valueOf(clientId), temperature, humidity);
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
     }
 
     public ResponseEntity setCapacitys(String clientId, int buffer, int capacity){
+        logger.info("device set clientId={} buffer={} capacity={}",clientId, buffer, capacity);
         houseMapper.updateCapacity(Long.valueOf(clientId), capacity);
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
     }
 
     public ResponseEntity setAq(String clientId, int aq){
+        logger.info("device set clientId={} aq={}",clientId, aq);
         houseMapper.updateAq(Long.valueOf(clientId), aq);
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
     }
 
     public ResponseEntity setGas(String clientId, int gas){
+        logger.info("device set clientId={} gas={}",clientId, gas);
         houseMapper.updateGas(Long.valueOf(clientId), gas);
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
     }
 
     public ResponseEntity setWeight(String clientId, int userId, int category, int weight){
 //        houseMapper.updateAq(Long.valueOf(clientId), gas);
+        logger.info("device set clientId={} userId ={} category={} weight={}",clientId, userId, category, weight);
         HouseInfo houseInfo = houseMapper.getHouseInfo(clientId);
         houseMapper.addWeightHistory(Long.valueOf(clientId), houseInfo.getSorter(), userId, category, weight, "");
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
@@ -131,6 +138,7 @@ public class DeviceService {
 
     public ResponseEntity setblock(String clientId, int pn, int indoor, int outdoor, int tank){
 //        houseMapper.updateAq(Long.valueOf(clientId), gas);
+        logger.info("device set block clientId={} sn={} indoor={} outdoor={} tank={}" ,clientId, pn, indoor, outdoor, tank);
         HouseInfo houseInfo = houseMapper.getHouseInfo(clientId);
         if (houseInfo == null){
             return new ResponseEntity(1, "house not exist", "");
