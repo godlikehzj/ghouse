@@ -67,7 +67,7 @@ public class HouseStatus {
 
     private HouseStatus(){
         stateText = new HashMap<>();
-        stateText.put(0, "未满");
-        stateText.put(1, "已满");
+        stateText.put(0, "正常");
+        stateText.put(1, "异常");
     }
 }

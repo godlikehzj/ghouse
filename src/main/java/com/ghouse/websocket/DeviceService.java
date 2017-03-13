@@ -6,6 +6,7 @@ import com.ghouse.service.mapper.HouseMapper;
 import com.ghouse.service.mapper.UserMapper;
 import com.ghouse.utils.ResponseEntity;
 import com.ghouse.utils.SysApiStatus;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,8 @@ public class DeviceService {
 
     private GhwebSocketHandler handler;
 
+    private Logger logger = Logger.getLogger(DeviceService.class);
+
     public void SetHandler(GhwebSocketHandler hander){
         this.handler = hander;
     }
@@ -45,19 +48,36 @@ public class DeviceService {
         }
     }
 
+    public boolean innerOpenDoor(String clientId, String doorId){
+        if (handler.sendMessage(clientId, doorId) == 1){
+            return false;
+        }
+        return true;
+    }
+
     public ResponseEntity openDoor(String clientId, String token, String doorId){
         User user = userMapper.getUserByToken(token);
         if (user == null){
-            return new ResponseEntity(1, "无效token", "");
-        }
-        String updateUserId = clientId;
-        updateUserId = updateUserId.replace(updateUserId.charAt(updateUserId.length() - 1), '2');
-        if (handler.sendMessage(updateUserId, String.valueOf(user.getId())) == 1){
-            return new ResponseEntity(1, "client not collected", updateUserId);
+            return new ResponseEntity(1, "无效token", null);
         }
 
         if (handler.sendMessage(clientId, doorId) == 1){
             return new ResponseEntity(1, "client not collected", clientId);
+        }
+
+        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), null);
+    }
+
+    public ResponseEntity customerOpenDoor(String houseId, String doorId, String customerId){
+        String clientId = houseId + "1";
+        if (handler.sendMessage(clientId, doorId) == 1){
+            return new ResponseEntity(1, "ecu 1 client not collected", clientId);
+        }
+
+
+        String updateUserId = houseId + "2";
+        if (handler.sendMessage(updateUserId, customerId) == 1){
+            logger.warn("ecu 2 client not collected " + updateUserId);
         }
 
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
@@ -76,6 +96,9 @@ public class DeviceService {
         if (!filename.isEmpty()){
             url = SysApiStatus.fileUrl + filename;
         }
+
+        houseMapper.addPhoto(Long.valueOf(clientId.substring(0, clientId.length() -1)), Long.valueOf(userId), url, "");
+
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), url);
     }
 
@@ -101,7 +124,8 @@ public class DeviceService {
 
     public ResponseEntity setWeight(String clientId, int userId, int category, int weight){
 //        houseMapper.updateAq(Long.valueOf(clientId), gas);
-        houseMapper.addWeightHistory(Long.valueOf(clientId), userId, category, weight);
+        HouseInfo houseInfo = houseMapper.getHouseInfo(clientId);
+        houseMapper.addWeightHistory(Long.valueOf(clientId), houseInfo.getSorter(), userId, category, weight, "");
         return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), "");
     }
 

@@ -4,7 +4,6 @@ import com.ghouse.bean.User;
 import com.ghouse.controller.base.BaseController;
 import com.ghouse.service.HouseService;
 import com.ghouse.service.PayService;
-import com.ghouse.utils.HouseStatus;
 import com.ghouse.utils.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by zhijunhu on 2017/1/10.
@@ -31,9 +33,10 @@ public class PayController extends BaseController {
     public void getCommodity(@PathVariable String format,
                              HttpServletRequest request,
                              HttpServletResponse response,
-                             @RequestParam("houseId") Integer houseId,
+                             @RequestParam("houseId") String houseId,
                              @RequestParam("doorId") Integer doorId){
-        outResult(request, response, format, payService.getCommodity(houseId, doorId));
+        String token = request.getHeader("token");
+        outResult(request, response, format, payService.getCommodity(houseId, doorId, token));
     }
 
     @RequestMapping(value = "getCommodityList.{format}")
@@ -76,6 +79,22 @@ public class PayController extends BaseController {
     public void payResultNotify(@PathVariable String format,
                                 HttpServletRequest request,
                                 HttpServletResponse response){
+        Map<String,String> params = new HashMap<String,String>();
+        Map requestParams = request.getParameterMap();
+        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            String name = (String) iter.next();
+            String[] values = (String[]) requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i]
+                        : valueStr + values[i] + ",";
+            }
+            //乱码解决，这段代码在出现乱码时使用。
+            //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            System.out.println(name + " : " + valueStr);
+            params.put(name, valueStr);
+        }
+        payService.processResult(params);
 
     }
 }

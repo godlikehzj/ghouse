@@ -63,6 +63,16 @@ public class DeviceController extends BaseController {
         outResult(request, response, format, deviceService.openDoor(clientId, token, doorId));
     }
 
+    @RequestMapping(value = "customer/opendoor.{format}")
+    public void customerOpenDoor(@PathVariable String format,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 @RequestParam("doorId") String doorId,
+                                 @RequestParam("customerId") String customerId){
+        String houseId = request.getHeader("clientId");
+        outResult(request, response, format, deviceService.customerOpenDoor(houseId, doorId, customerId));
+    }
+
     @RequestMapping(value = "sendtemperatureandhumidity.{format}")
     public void sendtemperatureandhumidity(@PathVariable String format,
                                            HttpServletRequest request,

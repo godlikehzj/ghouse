@@ -14,12 +14,13 @@ public class HouseInfo {
     private int aq;
     private int door;
     private int lamp;
-    private int capacity;
+    private String capacity;
     private String res_info;
     private double lng;
     private double lat;
     private String indoor;
     private String outdoor;
+    private int sorter;
 
     public HouseInfo() {
     }
@@ -105,11 +106,11 @@ public class HouseInfo {
         this.lamp = lamp;
     }
 
-    public int getCapacity() {
+    public String getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(String capacity) {
         this.capacity = capacity;
     }
 
@@ -152,5 +153,13 @@ public class HouseInfo {
 
     public void setOutdoor(String outdoor) {
         this.outdoor = outdoor;
+    }
+
+    public int getSorter() {
+        return sorter;
+    }
+
+    public void setSorter(int sorter) {
+        this.sorter = sorter;
     }
 }

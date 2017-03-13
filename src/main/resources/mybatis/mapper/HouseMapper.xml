@@ -37,8 +37,8 @@
     </update>
 
     <insert id="addWeightHistory">
-        INSERT INTO weight_history(hid, uid, category, weight, createTime) VALUES
-        (#{clientId}, #{userId}, #{category}, #{weight}, now())
+        INSERT INTO weight_history(hid, uid, customerId category, weight, createTime, rid) VALUES
+        (#{clientId}, #{userId}, #{category}, #{weight}, now(), #{rid}, #{customerId})
     </insert>
 
     <select id="getHandleHistory" resultType="com.ghouse.bean.HandleHistory">
@@ -46,7 +46,7 @@
     </select>
 
     <select id="getHandleByHouseId" resultType="com.ghouse.bean.HandleHistory">
-        SELECT * FROM handle_history WHERE hid = #{hid} AND handle_statu =1;
+        SELECT * FROM handle_history WHERE hid = #{hid} AND handle_statu =1 and type = #{type};
     </select>
 
     <select id="getHandleByUserId" resultType="com.ghouse.bean.HandleHistory">
@@ -58,10 +58,14 @@
     </update>
 
     <insert id="addHandleStatu">
-        INSERT INTO handle_history(uid, hid, handle_statu, handleTime) VALUES (#{uid}, #{hid}, 1, now());
+        INSERT INTO handle_history(uid, hid, handle_statu, handleTime, type) VALUES (#{uid}, #{hid}, 1, now(), #{type});
     </insert>
 
     <update id="updateBlock">
         UPDATE house SET indoor = #{indoor}, outdoor = #{outdoor}, res_info = #{resInfo} WHERE id= #{clientId};
     </update>
+
+    <insert id="addPhoto">
+        INSERT INTO photo(customerId, createTime, uri, rid) VALUES (#{customerId}, now(), #{uri}, #{rid})
+    </insert>
 </mapper>

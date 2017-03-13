@@ -3,19 +3,26 @@ package com.ghouse.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.ghouse.bean.Commodity;
+import com.ghouse.bean.PayInfo;
 import com.ghouse.bean.PayOrder;
 import com.ghouse.bean.User;
 import com.ghouse.service.mapper.PayMapper;
+import com.ghouse.service.mapper.UserMapper;
 import com.ghouse.utils.AlipayUtil;
 import com.ghouse.utils.ResponseEntity;
 import com.ghouse.utils.SysApiStatus;
+import com.ghouse.websocket.DeviceService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -23,8 +30,17 @@ import java.util.Random;
  */
 @Service
 public class PayService {
+
+    private Logger logger = Logger.getLogger(PayService.class);
+
     @Autowired
     private PayMapper payMapper;
+
+    @Autowired
+    private DeviceService deviceService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     private String generateSn(){
         Random random = new Random();
@@ -35,16 +51,68 @@ public class PayService {
                 JSON.toJSON(payMapper.getCommodityList()));
     }
 
-    public ResponseEntity getCommodity(int houseId, int doorId){
+    public ResponseEntity getCommodity(String houseId, int doorId, String token){
         if (doorId > 9){
             return  new ResponseEntity(2, "invalid house id or door id", "");
         }
 
-        Commodity commodity = payMapper.getCommodity(doorId);
+        User user = userMapper.getUserByToken(token);
+        if (user == null){
+            return new ResponseEntity(1, "无效token", null);
+        }
+        if (user.getRole() == 1){
+            if (!houseId.substring(houseId.length() - 1).equals("1")){
+                return new ResponseEntity(3, "无权限开门", null);
+            }
+        }else if (user.getRole() == 2){
+            if (!houseId.substring(houseId.length() - 1).equals("3")){
+                return new ResponseEntity(3, "无权限开门", null);
+            }
+            if (doorId > 3){
+                return new ResponseEntity(3, "无权限开门", null);
+            }
+        }else{
+            if (!houseId.substring(houseId.length() - 1).equals("3")){
+                return new ResponseEntity(3, "无权限开门", null);
+            }
+            if (doorId <= 3){
+                return new ResponseEntity(3, "无权限开门", null);
+            }
+        }
 
-        return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), commodity == null?"":JSON.toJSON(commodity));
+        if (user.getRole() == 3 && doorId > 3){
+            Commodity commodity = payMapper.getCommodity(doorId);
+            DecimalFormat df = new DecimalFormat("######0.00");
+            double price = (double)Integer.valueOf(commodity.getPrice()) / 100;
+            commodity.setPrice(df.format(price));
+            return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), JSON.toJSON(commodity));
+        }
+
+        return deviceService.openDoor(houseId, token, String.valueOf(doorId));
     }
 
+    public void processResult(Map<String, String> params){
+        try{
+//            if (AlipayUtil.checkSign(params)){
+                String tradeNo = params.get("out_trade_no");
+                payMapper.PayOk(tradeNo);
+                List<PayInfo> infos = payMapper.getPayInfo(tradeNo);
+                if (infos.size() > 0){
+                    PayInfo info = infos.get(0);
+                    if (!deviceService.innerOpenDoor(info.getHid(), String.valueOf(info.getDoorId()))){
+                        logger.error("pay success opendoor failed orderNo:"+tradeNo + " clientId:" + info.getHid() + " doorid:" + info.getDoorId());
+                    }else{
+                        logger.info("pay success opendoor ok  orderNo:" + tradeNo);
+                    }
+                }
+//            }else{
+//                logger.error("check sign failed");
+//            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
     public ResponseEntity prepay(User user, int houseId, int doorId, String pay_method){
         if (doorId > 9){
             return  new ResponseEntity(2, "invalid house id or door id", "");
@@ -68,9 +136,9 @@ public class PayService {
         }else if (pay_method.equals("alipay_sdk")){
             String orderStr = "";
             DecimalFormat df = new DecimalFormat("######0.00");
-            double price = (double)commodity.getPrice() / 100;
+            double price = (double)Integer.valueOf(commodity.getPrice()) / 100;
             orderStr = AlipayUtil.getPrepay(commodity.getName(), orderSn, df.format(price));
-
+            System.out.println(orderStr);
             return new ResponseEntity(SysApiStatus.OK, SysApiStatus.getMessage(SysApiStatus.OK), orderStr);
         }else {
             return new ResponseEntity(3, "invalid pay method", "");

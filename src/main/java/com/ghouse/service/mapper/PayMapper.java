@@ -1,6 +1,7 @@
 package com.ghouse.service.mapper;
 
 import com.ghouse.bean.Commodity;
+import com.ghouse.bean.PayInfo;
 import com.ghouse.bean.PayOrder;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +20,6 @@ public interface PayMapper {
                             @Param("orderSn") String orderSn,
                             @Param("commodityId") int commodityId,
                             @Param("pay_method") String pay_method);
+    public void PayOk(@Param("orderSn") String orderSn);
+    public List<PayInfo> getPayInfo(@Param("orderSn") String orderSn);
 }

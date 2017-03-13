@@ -24,15 +24,21 @@ public interface HouseMapper {
     public void updateCapacity(@Param("clientId") long clientId, @Param("capacity") int capacity);
     public void addWeightHistory(@Param("clientId") long clientId,
                                  @Param("userId") long userId,
+                                 @Param("customerId") long customerId,
                                  @Param("category") int category,
-                                 @Param("weight") int weight);
+                                 @Param("weight") int weight,
+                                 @Param("rid") String rid);
     public HandleHistory getHandleHistory(@Param("uid") long uid, @Param("hid") long hid);
-    public List<HandleHistory> getHandleByHouseId(@Param("hid") long hid);
+    public List<HandleHistory> getHandleByHouseId(@Param("hid") long hid, @Param("type") int type);
     public List<HandleHistory> getHandleByUserId(@Param("uid") long uid);
     public void updateHandleStatu(@Param("id") long id, @Param("statu") int statu);
-    public void addHandleStatu(@Param("uid") long uid, @Param("hid") long hid);
+    public void addHandleStatu(@Param("uid") long uid, @Param("hid") long hid, @Param("type") int type);
     public void updateBlock(@Param("clientId") long clientId,
                             @Param("indoor") String indoor,
                             @Param("outdoor") String outdoor,
                             @Param("resInfo") String resInfo);
+    public void addPhoto(@Param("clientId") long clientId,
+                         @Param("customerId") long customerId,
+                         @Param("uri") String uri,
+                         @Param("rid") String rid);
 }

@@ -25,4 +25,12 @@
     <insert id="createOrder">
         INSERT INTO pay_orders(uid, orderSn, commodityId, status, createTime, hid, pay_method) VALUES (#{uid}, #{orderSn}, #{commodityId}, 1, now(), #{hid}, #{pay_method})
     </insert>
+
+    <update id="PayOk">
+        UPDATE pay_orders SET status = 0 WHERE orderSn = #{orderSn};
+    </update>
+
+    <select id="getPayInfo" resultType="com.ghouse.bean.PayInfo">
+        SELECT p.hid, r.doorId FROM pay_orders as p, commodity as c, house_res as r WHERE p.orderSn = #{orderSn} and p.commodityId = c.id AND c.name = r.name;
+    </select>
 </mapper>

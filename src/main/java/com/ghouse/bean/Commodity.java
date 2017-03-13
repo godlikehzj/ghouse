@@ -7,7 +7,7 @@ public class Commodity {
     private long id;
     private String name;
     private String description;
-    private int price;
+    private String price;
 
     public Commodity() {
     }
@@ -36,11 +36,11 @@ public class Commodity {
         this.description = description;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 }
